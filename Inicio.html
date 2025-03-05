@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú de Botones</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('Desierto.jpg'), url('Jungla.jpg'), url('Hielo.jpg');
+            background-position: top left, top center, top right;
+            background-repeat: no-repeat, no-repeat, no-repeat;
+            background-size: 33.33%, 33.33%, 33.33%;
+            background-attachment: fixed;
+            margin: 0;
+        }
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 50px;
+            z-index: 1;
+        }
+        .boton {
+            background-color: #00bcf5;
+            color: white;
+            font-size: 600%;
+            font-family: Arial, sans-serif;
+            border: none;
+            padding: 15px 40px; 
+            border-radius: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .boton:hover {
+            background-color: #027a9e;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu">
+        <button class="boton" onclick="window.location.href='dificultad.html'">INICIAR</button>
+        <button class="boton" onclick="window.location.href='opciones.html'">OPCIONES</button>
+    </div>
+</body>
+</html>
