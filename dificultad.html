@@ -70,24 +70,28 @@
             text-align: center;
             cursor: pointer;
             transition: background 0.3s;
+            text-shadow: 1px  0px 5px black,
+               0px  1px 5px black,
+              -1px  0px 5px black,
+               0px -1px 5px black;
         }
         .boton:nth-child(1) {
             background-color: #ff6f7d00;
         }
         .boton:nth-child(1):hover {
-            background-color: #357a38;
+            background-color: #357a38a8;
         }
         .boton:nth-child(2) {
             background-color: #ff6f7d00;
         }
         .boton:nth-child(2):hover {
-            background-color: #c4ce34;
+            background-color: #c4ce3481;
         }
         .boton:nth-child(3) {
             background-color: #ff6f7d00;
         }
         .boton:nth-child(3):hover {
-            background-color: #ff4f5d;
+            background-color: #ff4f5e80;
         }
     </style>
 </head>
@@ -97,7 +101,7 @@
         <div class="titulo">ELIJE UN NIVEL DE DIFICULTAD</div>
     </div>
     <div class="menu">
-        <button class="boton">Nivel 1</button>
+        <button class="boton" onclick="window.location.href='Mundos1.html'">Nivel 1</button>
         <button class="boton">Nivel 2</button>
         <button class="boton">Nivel 3</button>
     </div>
