@@ -3,11 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laberinto con Cofres y Llaves</title>
+    <title>Laberinto</title>
     <style>
         body{
-            font-family: Comic Sans MS;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-image: url('DesiertoAncho.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+            transition: background 0.5s ease-in-out;
+            margin: 0;
         }
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+        .titulo {
+            font-size: 2em;
+            font-weight: bold;
+            text-align: center;
+            flex-grow: 1;
+        }
+        .boton-regresar {
+            background-color: #00bcf5;
+            color: white;
+            font-size: 1.2em;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .boton-regresar:hover {
+            background-color: #027a9e;
+        }
+
+/*  COMIENZA EL CODIGO DEL LABERINTO*/
         #mapa {
             display: grid;
             grid-template-columns: repeat(10, 30px);
@@ -86,10 +130,22 @@
         .right::before {
             transform: rotate(-45deg);
         }
+
+        aside {
+            background-color: #f1f1f1;
+            padding-left: 20px;
+            width: 310px;
+            height: 80px;
+        }
     </style>
 </head>
-
 <body>
+
+    <div class="header">
+        <button class="boton-regresar" onclick="window.location.href='inicio.html'">Regresar</button>
+        <div class="titulo">Prueba</div>
+    </div>
+
     <h1>Haz clic en uno de los botones rosados para moverte</h1>
     <div id="mapa"></div>
     <div class="contenedor-boton">
@@ -98,8 +154,11 @@
         <div class="boton left" onclick="mover('izquierda')"></div>
         <div class="boton right" onclick="mover('derecha')"></div>
       </div>
+      <!--esto va a un lado-->
+      <aside>
     <p id="mensaje"></p>
     <P id="contador"></P>
+</aside> 
 
     <script>
         const laberinto = [ //LABERINTO, los 0 son camino libre, los 1 son muros
