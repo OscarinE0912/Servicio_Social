@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laberinto con Puertas y Llaves</title>
+    <title>Laberinto con Cofres y Llaves</title>
     <style>
         body{
             font-family: Comic Sans MS;
@@ -36,19 +36,25 @@
         }
         .objetivo {
             background-color: red;
+            background-size: cover;
+            background-image: url(https://i0.wp.com/eltallerdehector.com/wp-content/uploads/2022/07/estrella-mario-bros-png.png?resize=600%2C600&ssl=1);            
         }
-        .puerta {
+        .cofre {
             background-color: blue;
+            background-size: cover;
+            background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPspwB-UsWGPYx-zsmConhp6Ey8zptO1e41Q&s);
         }
         .llave {
             background-color: orange;
+            background-size: cover;
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAABqlBMVEX/////5TQAAAD+94+wgwCkfQDssRXzwyCxj0qcbwCqiACdcQCqgSfttBfuthjwuxv2zSawkQDopQ71yiT40in94DH0xyLywB4AABT72S3rrRPmoQz83S/pqBC1hwDkmwgVFBT+7HSVYQC+jwj/84P//5Xr6+v19fXIlgvR0dHkrBTPng/AlA6YZgDh4eGRWgDGxsbhsBf/4xz/7nv84k7+88aioqK6urrx6+NeXV2NUwD632LyvgD3z0H20VX+/PD73ET/7ouIh4jh23+dmVorKh/64GrxwkAYDgA4ODhsbGyAgIHyyXqdnZ1EQ0M9KABtUAuvdgVgSxX10mX61AD/7Gf/+uDi17vTw53GsHu6nlmwjzG7n2fOysEoKC2moZZ/XABlYjq9uGxGRCiBfkvW0HlROhLPjAquqWNQTjIbGhCcl05lYi03KArp4NEwLg723LEpGQDvwGgjFwClezqNaBEhISHGrpD01Zi7fgU9QEUAABu1lW1SWGIkBwBudH1vViOLhnxTUS9pVjVyWBWNbRZDNhWtiFn32H/yxljSrDLizWDYthz/9LUDxhxEAAAOxklEQVR4nO3di1caVx4H8OEqUGuAFHyMgyDIYxiISIJKjaiJmhg1GiWNfVvXJNpm69bG0mp3u2l3bTa72/2f93fvvO48QDGPGe7h26OClz1nPud353fvDGzkuE466aSTTjrppJNOOumE9YjZbNbpY3i9lKYWFhamSiJ+/OHHn3z62edeOZ9/8enHXy7sIJyNddHp47xkpGmk5uevPvOasnsPoT8t7e3tLT1GaM3pY71MxFWUWHralclkup5ixO77Xm93twZ8ie58TQbha/EJQkWnj7flFBFa6sp0yclknj5GtRE9pwm0lFFHYfxpAklOH3GLKaLEoi7AiCW0rwEPeGQa7bqD2qzloESXgQCIr1Etqgh5y2jXIlpx+phbyrSpRkoVt2TiPlo0D3Zl9tBXTh91C5HgLLMYujKPeeyL9qCv7Ua/Qe996PSBXzgbz2wIuIh1XET+se3oE7Q5+pPTR37BSHZFynR9W5xG0ZHoGFr4c8Y8DqOVlcOe0R/aY/FfQ789NfcZaDQS0Lei0Xsb3BTa66KRGTgLX3DrqKdnbOwvTh/9RYJWuV++Xczoq2Hm9hLawasB2oyeogrHVRB6sreIR8iO4MkztI5LvwvE8Y+dPvxzs52TDd8t7S1CR118uvfkO8RXyNgaCu8i8miB7ObuQMjWlGxpUA0XcdztJ+NRtFdevCu/qLtSfrWkDFbQweG08ri0sCEPrywo+5mVfQC6nnh/ZHkJqU+KJYhENY8sqqMp6tUiRH+2+v2I+4nPR+Yy3zbZnSReNtmArqMR1xOfR++ml79fbfwCuKBqvB5UQCgTb7q13RBg7F6Tq701hBoPltCBShx356JBgGEBd/5GWWi2wZbQKd7WYeHYqBuX/hNSwVhT4VRz4cGIShz94c0f4OvmKDqTngufK2xykqrCA3d2m/nwXHomJgggbHIeNhWWFOHIKek2brvSyC+n7wIQcmwRSuqKDwvCtHlQD+mlJFsunKf3hXRakLO/YRqTkLbMmztNZYF6sq4Jyanorh3qNu4yinBzxzQ4jRLqGrGGEvRIxXAjcfVYvc0xcjAKRRx9q4fcYgRtjgpC3bTkiQiE8s4br/j0UGL1R2oHsKHfqyLz1E3N5sSXLvsUoOA13TaTELiUBgObbWpQ2oGZWdGeot2oTsRFvPkujv1CmQ/DQqEChRwqGUbX1wCWkB+jfXpfulaB5qqtLUX1TpXcT0fHRt1TxPvBdFnw+dQqmhbEtRK+GiSTUYRrC71m3EoWhFpzhUsrSjgyChl/R4DzMh8jbUYl+kzNdBo75Nv2EsrRrQXh1qO9eBVFo4YigtAl7fR+SC6hTzb66sbrBxCuI3nmTqFYTV8uRBAmdCHajEZpIy6iS9ZEXEKZR4i+HD0TiXAVyb9aPRYofhHh5UIVkttUNBEX0R0bmxM4C31qCcnXsWGaTlc4dblAm3QfKqIVpNdwDUXV6EV0R6+5Ppee8xnSY1gvVn+cVoRZ1B2L0c0zkUionUZEm2ETccsl03Q7Vk6HKB4uIzJuxkBChBUUi8V2f1YHZKHyUtxJqcgbG3dMU+gzSV/AWEQvvXOpEAheBtc2hVgsp52IWTKgbFk3DsPRqMnokm4awJM0EDAYA4dUEeVS4dXirymoofBAu9um0bF2yySMjkRhmo7/7V17LNkWkulQgIQiFugzkUDgp3QPShiLdWvTdEcZgCw8MAMhuJs6v/0+wp00YCH2/qK/ZFrpmGu9RCj8XX3THq401A0AStkI8TS96fgNm+ez6ZlAMGA2Bjf1NRFORNJAoYQCGIX4C2VAggG51uu1WDhsNWKh43fdgnAaBgLBoKWMD/R5ukK2pVPdPiFcwNdY++rQgro3QNFw2IYIJ+LNL9+9yZB5H2xoMM9axm+0F4lruJ38KtSPEUIPuoWw+T7H+lgsHLYxnrpgzZ/0ldPBIC5h0GQM+H7LlqbW1xam5A9FTfXit2G+g6+asGW8tS8+UIEm4oELmukRrIbBoGKkiIFg4SwBmnvHx+TtpxeVXYSeLGYymaf/QDWfcavyIhqmQrea8dFxp3c19wfTdwMqkTLma4e/xwt5AT8W8rnu+gN0R/l8RmYJ9Qg/VdY2dnZ2fl6dkjhpKxYO2xvHR0frDgtxKw2q0Yi+/JV80LB6BHcR/ZGFw3v7myQPENr5p2AS6kQXXAUvz6bnghRRMfqCNE+A/+jP0GQep7S7OkKh/vJZ1ExUjOEx54WhOVpIdxyD0ZcyfMJmcVcgi78cIfUyGrMtoxuEsBzOBkMmI2amrhiIqfLdNI7y2YXPcfV0Y8wbsxCxMbzlAuEMFpqIgeC1xFnQuAEQZBP+pk1QzRiXf1iMbhCGQBjCoY3BFF+z7sZ1qJko1FWr2bjl/NZbE9LGAM/b7HFsiTJtX6umRej4ekgJdWKePwxZ9jhKV7UpoxDfp85Js9DpPQ0t1Ix5njfvcZrWsVanuw4tHHNeuDxHCxViqMafhey343ZlTPFxWkgbXXBnH/Y0cyFLCjz/e1VtrArRyKQSTiRwg7U1uuD68BXs2rDpuiFBL8+fBQL5C0QoPON7NBf5ombpuPM324786bsA7DYlXuf5RD0eN//ekngvzx/avSwOvhjsvB1/h22ymk6CMGdOIfUSDr2nULCMGF9V4/l9+zEoZ+xgdPxfTgvnQ+V0aBD+s8abAOOVgNZhzU0nEMid8Txft7RW/ZQ8db7RcFz1rqGZUl01FPQ+A8G+Nx8y+6DL5rvP8Git4LO1ydly/jTkuIe4mUIJB3HMzOo1mIU8f+esuxDU9+e+nPfskPy+ng9aK4iZCtX5PRvkaACaKeAanHCFVL2WwBr+cL92drZ7Vnv5jDxN7J95tf9NyhICjDq/3kPmq+UyLl/DthmPx3vP9o95Koe13V74dbNOS4QHzq+GOIOwb9MnqOkySg08zudyXq+3O1fIk1PRujBC8E/lcgN/bblhknLcCaz5g3qsLcd4YYXh5K0q+tqxQTt1QyeFbFfT5cHBZkbbypq2cTZXVcKBC960IFmWpynQrjfORTZw8hTNK/cAYJK6oc/gnETkaXr93C3aBZNTduRuWAzlVJNp/2DjBaPl5GXhqVtKKF9fDFpyzumonJGmd4/pM9E9JdSWxOa8kNF27n2cuHtKaCiiv8VSNq6jO9ZCJfPqmegvWPdfrSWvGH2n7vp/lZB26vcP+lOv20cLyn2cvPMXhsbgrZsfE1ucojbvjsvZctMcxdmGZuPHafk0tO84OVdsuQ15Jc9TQrQ4L7aPozeqN12xITVmFu/dSBn9TTZvzfZv1F58y0ULhZb56kx6QAZedrOmljGQcvq9CvtMVpPyqegvXCq5vPohh4I7gbBkVMtJPx2bDUCzM1I9HfNuBUK3oYmtN1X1Uw7uBXLcw4HyjN+cCzrVrarwhdOKpnlY1YjX4y0kpxqDgguXCUNeVZPKRC20IkzJlQwEfa7ajNrmpDpTbjpPm15ZLbvjvkzzTFZny5HWfGq38T13+uAvlu2BSHm2CbGhMXDk9KFfOK+qMzMtTlM8Q7edPu4WMumPJFssY+DE6YNuMa+qt2YGLl7G4L/nnT7iljP/sDo7O9CQaARen3T6cC+V7SZG/ywJ4Q1eT73n9LFeNvOz5QH7qfqf/+IkCTDe09O2Qm4uOTAwYFNGf+p9r3fsiiz09ra30D9gU0Z/6oP3vb0gHGRAKMdE1IUQNoSmMrIkjMg+k5E9oaWOipDMWFaExjKyKDSWkV2hamRJGDGciSqRLaFNGQcYEl6NRGzKqAnx+3FtLoxEzEQSXehvd+HViK2RRaHRyKYwYhVi4EC7C2lihE3hVZsyRhgTWsuoCQcYEVqMuhDChtA0VVUhqScrQkMZKSErs9RkvErVsN2FfbbEqwzNUoNQMzIsVIxMCfvMRgaFNmWkhVcZEFrLqAlhcWxv4YwitJRRF0bae5ZqQrNREZJzkhWh0ciQ8JYtsY8d4a10X5+NkR3hfJ+J2MeasBFRE15te6ENsc8ghLS50J7Yd00Wknq2u9CO2MeW0JbIltCOyJiQEG8xLcRExoWTQ31DTAsnPzL6mBMCEGIrhMWRAaEMNBiHFCF50vZCDUgRmRJSQN3IktAIVIkMCc1AxciOcPKjWxbhkEk41ObC9ISVOMSQEIhlOyJDwkZEhoQNJipLQpk4zLJQnqjDwwwLlSoOMyxUicMWIV4cmRByk8PpieFh3TisCSFMCLlbhKcR2RPKBRzWysicUAcqZWRNONFPl5B8sSWc6O+niSSUcLjthRhoNA6xJVSAxjL2MyTUgAYjQ8KJG/12RHaEtz1JT7+NkR0hl5wwEfsNQrw49re3sAFRF8LjNhfaEMHoYUmIif1mIltCuyoyJiRED9NCmehhWcglHxmJtNDDhJDzPPJ4KCN7wts3PEoYFepAhagJ8crBgJAGykZVSLTtLzQBMZEtoQWIw5LQFsiS0B5IhD2acMz9/2hpwzQAGms45vZ/drZJbt+YaCDE//DstQlZ2M5zdPtG2l6oddV+zx89Th/la2XS05zo8fSNuuZPrVwu//OUm1exnbuMnNvkyqlhvG3cZdSUHzUhFtq5y2iZePSoEfCPK04f3JuJJ9lgzegba/Muo2beU7YlMtBl1MCyaEf0fuL0gb25TNqt/Nfc/UcQWozNsshKl1Fze8JEHGr3vYwlSePK3z/mur/n9NoxLovdrXeZrCRl38JxvcF4kjrxg9a7jJTNFotFTpIkYhVLJbHIZfH3LJcVuWyRg+ecCD+z2ayIX/bOM39DWxYv0WXEolQUuSJX4rhSFmpZEuELPxOlEgdI+C4CKlsswY9itvQWAOdHWxb7elrvMsQGJSLCkiSKFagnYLL4OxStWBQVYYXDQii3A1GWxf6eS3SZooiFWVGtIfxGIkKYjviBRJ5hIdicqiFeFtOX3stIYgkbKlmpWITTUBKxrYTPOA7/Es/bUrYIQg5ekIWHzvzJGvzhjGuX242KWAYdBboK+QalgkfydxFrRNJi8EMYFbNO9d3kjT8uvdKL7fCHhKCKTh9AJ5100slbyP8Bpl0Njj9FGhEAAAAASUVORK5CYII=);
         }
 
         /* Estilos para los botones circulares */
-        .button {
+        .boton {
             width: 50px;
             height: 50px;
-            border: 2px solid #FF6F91; /* Color rosado */
+            border: 2px solid #FF6F91;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -57,11 +63,11 @@
             background-color: lightgray;
             cursor: pointer;
         }
-        .button::before {
+        .boton::before {
             content: '';
             width: 20px;
             height: 20px;
-            border: solid #FF6F91; /* Color rosado */
+            border: solid #FF6F91;
             border-width: 0 4px 4px 0;
             display: inline-block;
         }/*alinear los botones*/
@@ -71,33 +77,32 @@
         .up::before {
             transform: rotate(-135deg);
         }
-
         .down::before {
             transform: rotate(45deg);
         }
-
         .left::before {
             transform: rotate(135deg);
         }
-
         .right::before {
             transform: rotate(-45deg);
         }
     </style>
 </head>
+
 <body>
     <h1>Haz clic en uno de los botones rosados para moverte</h1>
     <div id="mapa"></div>
     <div class="contenedor-boton">
-        <div class="button up" onclick="mover('arriba')"></div>
-        <div class="button down" onclick="mover('abajo')"></div>
-        <div class="button left" onclick="mover('izquierda')"></div>
-        <div class="button right" onclick="mover('derecha')"></div>
+        <div class="boton up" onclick="mover('arriba')"></div>
+        <div class="boton down" onclick="mover('abajo')"></div>
+        <div class="boton left" onclick="mover('izquierda')"></div>
+        <div class="boton right" onclick="mover('derecha')"></div>
       </div>
     <p id="mensaje"></p>
+    <P id="contador"></P>
 
     <script>
-        const laberinto = [
+        const laberinto = [ //LABERINTO, los 0 son camino libre, los 1 son muros
             [0, 1, 0, 0, 0, 1, 0, 0, 0, 0],
             [0, 1, 0, 1, 0, 1, 0, 1, 1, 0],
             [0, 0, 0, 1, 0, 0, 0, 1, 0, 0],
@@ -109,13 +114,13 @@
             [0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 1, 0, 1, 0, 1, 1, 0]
         ];
-
-        const meta = { x: 9, y: 9 };  // Meta en la posición (9, 9)
+        const meta = { x: 9, y: 9 };
         const objetivos = [
-            { x: 2, y: 4 },
-            { x: 6, y: 2 }
+            { id:1, x: 2, y: 4 },
+            { id:2, x: 9, y: 2 },
+            { id:3, x: 6, y: 8 }
         ];
-        const puertas = [
+        const cofres = [
             { x: 4, y: 5 },
             { x: 8, y: 8 }
         ];
@@ -124,7 +129,7 @@
             { x: 7, y: 4 }
         ];
 
-        const movimientosMaximos = 30;  // Limitar el número de movimientos
+        //LIMITE MOVIMIENTOS, const movimientosMaximos = 40;
         let movimientos = 0;
         let posicion = { x: 0, y: 0 };  // Empieza en la posición (0, 0)
         let recogidos = 0;
@@ -134,6 +139,7 @@
             const mapaDiv = document.getElementById('mapa');
             mapaDiv.innerHTML = '';  // Limpiar el mapa antes de actualizar
 
+            // Poner las cosas en el DOM
             for (let i = 0; i < laberinto.length; i++) {
                 for (let j = 0; j < laberinto[i].length; j++) {
                     const celda = document.createElement('div');
@@ -149,9 +155,9 @@
                             celda.classList.add('objetivo');
                         }
                     }
-                    for (const puerta of puertas) {
-                        if (i === puerta.x && j === puerta.y) {
-                            celda.classList.add('puerta');
+                    for (const cofre of cofres) {
+                        if (i === cofre.x && j === cofre.y) {
+                            celda.classList.add('cofre');
                         }
                     }
                     for (const llave of llaves) {
@@ -197,18 +203,58 @@
             // Verificar si la nueva posición es una pared
             if (laberinto[nuevaPosicion.x][nuevaPosicion.y] === 1) {
                 alert("¡Has chocado con una pared!");
-            } else if (llavesRecogidas === 0 && puertas.some(puerta => puerta.x === nuevaPosicion.x && puerta.y === nuevaPosicion.y)) {
-                alert("¡Necesitas recoger una llave para abrir esta puerta!");
+            } else if (llavesRecogidas === 0 && cofres.some(cofre => cofre.x === nuevaPosicion.x && cofre.y === nuevaPosicion.y)) {
+                alert("¡Necesitas recoger una llave para abrir este cofre!");
             } else {
                 posicion = nuevaPosicion;
                 movimientos += 1;
                 actualizarMapa();
+
+                function numeroAPalabras(num) {
+                    const unidades = ["cero", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve"];
+                    const decenas = ["", "", "veinte", "treinta", "cuarenta", "cincuenta", "sesenta", "setenta", "ochenta", "noventa"];
+                    const especiales = ["diez", "once", "doce", "trece", "catorce", "quince", "dieciséis", "diecisiete", "dieciocho", "diecinueve",
+                        "veintiuno","veintidos","veintitres","veinticuatro","veinticinco","veintiseis","veintisiete","veintiocho","veintinueve"
+                    ];
+                    
+                    if (num < 10) return unidades[num];
+                    if (num < 20) return especiales[num - 10];
+                    if (num < 100) {
+                        if (num % 10 === 0) return decenas[Math.floor(num / 10)];
+                        return decenas[Math.floor(num / 10)] + " y " + unidades[num % 10];
+                    }
+                }
+
                 // Verificar si se ha alcanzado un objetivo
                 for (const objetivo of objetivos) {
                     if (posicion.x === objetivo.x && posicion.y === objetivo.y) {
-                        alert("¡Has recogido un objetivo!");
-                        objetivos.splice(objetivos.indexOf(objetivo), 1);  // Eliminar el objetivo recogido
-                        recogidos += 1;
+                        alert("¡ Responde para vganar una estrella !");
+                        let respuesta;
+                        let resultado;
+
+                        switch(objetivo.id){
+                            case 1:
+                                respuesta=prompt('LETRA, ¿Cuánto es 8+9?'); //PROMT es para recibir una entrada desde el teclado
+                                resultado=numeroAPalabras(8+9);
+                                break;
+                            case 2:
+                                respuesta=prompt('NUMERO, ¿Cuánto es 5*7?');
+                                resultado=5*7;
+                                break;
+                            case 3:
+                                respuesta=prompt('NUMERO, ¿Cuánto es 12-4?');
+                                resultado=12-4;
+                                break;
+                            default: alert("No hay problema asignado a este objetivo");
+                                continue;
+                        }
+                        if(respuesta==resultado || respuesta.toLowerCase() === resultado){
+                            objetivos.splice(objetivos.indexOf(objetivo), 1);  // Eliminar el objetivo recogido
+                            recogidos += 1;
+                            alert("¡Respuesta correcta! Objetivo recogido")
+                        }else{
+                            alert("Respuesta incorrecta.")
+                        }         
                     }
                 }
                 // Verificar si se ha recogido una llave
@@ -229,6 +275,7 @@
                 }
             }
             document.getElementById('mensaje').innerText= `Movimientos: ${movimientos}`;
+            document.getElementById('contador').innerText=`Llaves: ${llavesRecogidas}`;
             //Por si hay limite de movimientos  document.getElementById('mensaje').innerText = `Movimientos: ${movimientos}/${movimientosMaximos}`;
         }
 
