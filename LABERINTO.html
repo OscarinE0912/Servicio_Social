@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laberinto con Puertas y Llaves</title>
+    <style>
+        body{
+            font-family: Comic Sans MS;
+        }
+        #mapa {
+            display: grid;
+            grid-template-columns: repeat(10, 30px);
+            grid-gap: 2px;
+            width: max-content;
+        }
+        .celda {
+            width: 30px;
+            height: 30px;
+            background-color: lightblue;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid black;
+        }
+        .jugador {
+            background-color: yellow;
+            background-size: cover;
+            background-image: url('drago.jpg');
+        }
+        .pared {
+            background-color: gray;
+        }
+        .meta {
+            background-color: green;
+        }
+        .objetivo {
+            background-color: red;
+        }
+        .puerta {
+            background-color: blue;
+        }
+        .llave {
+            background-color: orange;
+        }
+
+        /* Estilos para los botones circulares */
+        .button {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #FF6F91; /* Color rosado */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px;
+            background-color: lightgray;
+            cursor: pointer;
+        }
+        .button::before {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: solid #FF6F91; /* Color rosado */
+            border-width: 0 4px 4px 0;
+            display: inline-block;
+        }/*alinear los botones*/
+        .contenedor-boton{
+            display: flex;
+        }
+        .up::before {
+            transform: rotate(-135deg);
+        }
+
+        .down::before {
+            transform: rotate(45deg);
+        }
+
+        .left::before {
+            transform: rotate(135deg);
+        }
+
+        .right::before {
+            transform: rotate(-45deg);
+        }
+    </style>
+</head>
+<body>
+    <h1>Haz clic en uno de los botones rosados para moverte</h1>
+    <div id="mapa"></div>
+    <div class="contenedor-boton">
+        <div class="button up" onclick="mover('arriba')"></div>
+        <div class="button down" onclick="mover('abajo')"></div>
+        <div class="button left" onclick="mover('izquierda')"></div>
+        <div class="button right" onclick="mover('derecha')"></div>
+      </div>
+    <p id="mensaje"></p>
+
+    <script>
+        const laberinto = [
+            [0, 1, 0, 0, 0, 1, 0, 0, 0, 0],
+            [0, 1, 0, 1, 0, 1, 0, 1, 1, 0],
+            [0, 0, 0, 1, 0, 0, 0, 1, 0, 0],
+            [0, 1, 1, 1, 1, 1, 0, 0, 0, 1],
+            [0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+            [0, 1, 0, 1, 0, 1, 0, 1, 1, 0],
+            [0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
+            [0, 1, 0, 0, 0, 1, 0, 1, 1, 0],
+            [0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 1, 0, 1, 0, 1, 1, 0]
+        ];
+
+        const meta = { x: 9, y: 9 };  // Meta en la posición (9, 9)
+        const objetivos = [
+            { x: 2, y: 4 },
+            { x: 6, y: 2 }
+        ];
+        const puertas = [
+            { x: 4, y: 5 },
+            { x: 8, y: 8 }
+        ];
+        const llaves = [
+            { x: 1, y: 6 },
+            { x: 7, y: 4 }
+        ];
+
+        const movimientosMaximos = 30;  // Limitar el número de movimientos
+        let movimientos = 0;
+        let posicion = { x: 0, y: 0 };  // Empieza en la posición (0, 0)
+        let recogidos = 0;
+        let llavesRecogidas = 0;
+
+        function actualizarMapa() {
+            const mapaDiv = document.getElementById('mapa');
+            mapaDiv.innerHTML = '';  // Limpiar el mapa antes de actualizar
+
+            for (let i = 0; i < laberinto.length; i++) {
+                for (let j = 0; j < laberinto[i].length; j++) {
+                    const celda = document.createElement('div');
+                    celda.className = 'celda';
+                    if (laberinto[i][j] === 1) {
+                        celda.classList.add('pared');
+                    }
+                    if (i === meta.x && j === meta.y) {
+                        celda.classList.add('meta');
+                    }
+                    for (const objetivo of objetivos) {
+                        if (i === objetivo.x && j === objetivo.y) {
+                            celda.classList.add('objetivo');
+                        }
+                    }
+                    for (const puerta of puertas) {
+                        if (i === puerta.x && j === puerta.y) {
+                            celda.classList.add('puerta');
+                        }
+                    }
+                    for (const llave of llaves) {
+                        if (i === llave.x && j === llave.y) {
+                            celda.classList.add('llave');
+                        }
+                    }
+                    if (i === posicion.x && j === posicion.y) {
+                        celda.classList.add('jugador');
+                    }
+                    celda.id = `celda${i}_${j}`;
+                    mapaDiv.appendChild(celda);
+                }
+            }
+        }
+
+        function mover(direccion) {
+            /*      por si queremos un limite de movimientos
+            if (movimientos >= movimientosMaximos) {
+                document.getElementById('mensaje').innerText = "¡Has superado el límite de movimientos!";
+                return;
+            }
+                */
+
+            let nuevaPosicion = { ...posicion };
+            switch (direccion) {
+                case 'arriba':
+                    if (posicion.x > 0) nuevaPosicion.x -= 1;
+                    break;
+                case 'abajo':
+                    if (posicion.x < 9) nuevaPosicion.x += 1;
+                    break;
+                case 'izquierda':
+                    if (posicion.y > 0) nuevaPosicion.y -= 1;
+                    break;
+                case 'derecha':
+                    if (posicion.y < 9) nuevaPosicion.y += 1;
+                    break;
+                default:
+                    alert("Movimiento inválido");
+            }
+
+            // Verificar si la nueva posición es una pared
+            if (laberinto[nuevaPosicion.x][nuevaPosicion.y] === 1) {
+                alert("¡Has chocado con una pared!");
+            } else if (llavesRecogidas === 0 && puertas.some(puerta => puerta.x === nuevaPosicion.x && puerta.y === nuevaPosicion.y)) {
+                alert("¡Necesitas recoger una llave para abrir esta puerta!");
+            } else {
+                posicion = nuevaPosicion;
+                movimientos += 1;
+                actualizarMapa();
+                // Verificar si se ha alcanzado un objetivo
+                for (const objetivo of objetivos) {
+                    if (posicion.x === objetivo.x && posicion.y === objetivo.y) {
+                        alert("¡Has recogido un objetivo!");
+                        objetivos.splice(objetivos.indexOf(objetivo), 1);  // Eliminar el objetivo recogido
+                        recogidos += 1;
+                    }
+                }
+                // Verificar si se ha recogido una llave
+                for (const llave of llaves) {
+                    if (posicion.x === llave.x && posicion.y === llave.y) {
+                        alert("¡Has recogido una llave!");
+                        llaves.splice(llaves.indexOf(llave), 1);  // Eliminar la llave recogida
+                        llavesRecogidas += 1;
+                    }
+                }
+                // Verificar si se ha llegado a la meta
+                if (posicion.x === meta.x && posicion.y === meta.y) {
+                    if (recogidos === objetivos.length) {
+                        alert("¡Has completado el laberinto y recogido todos los objetivos!");
+                    } else {
+                        alert("¡Has llegado a la meta, pero no recogiste todos los objetivos!");
+                    }
+                }
+            }
+            document.getElementById('mensaje').innerText= `Movimientos: ${movimientos}`;
+            //Por si hay limite de movimientos  document.getElementById('mensaje').innerText = `Movimientos: ${movimientos}/${movimientosMaximos}`;
+        }
+
+        actualizarMapa();  // Iniciar con la posición actualizada
+    </script>
+</body>
+</html>
