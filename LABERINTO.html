@@ -50,7 +50,23 @@
         .boton-regresar:hover {
             background-color: #027a9e;
         }
-
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .instructions {
+            display: flex;
+            gap: 10px;
+        }
+        .left-panel {
+            width: 150px;
+            height: 300px;
+            border: 1px solid black;
+            padding: 10px;
+            overflow-y: auto;
+        }
 /*  COMIENZA EL CODIGO DEL LABERINTO*/
         #mapa {
             display: grid;
@@ -146,20 +162,37 @@
         <div class="titulo">Prueba</div>
     </div>
 
-    <h1>Haz clic en uno de los botones rosados para moverte</h1>
-    <div id="mapa"></div>
-    <div class="contenedor-boton">
-        <div class="boton up" onclick="mover('arriba')"></div>
-        <div class="boton down" onclick="mover('abajo')"></div>
-        <div class="boton left" onclick="mover('izquierda')"></div>
-        <div class="boton right" onclick="mover('derecha')"></div>
-      </div>
-      <!--esto va a un lado-->
-      <aside>
-    <p id="mensaje"></p>
-    <P id="contador"></P>
-</aside> 
+    <div class="container">
+        <div class="left-panel" id="instruction-list"></div>
+        <div class="maze">
+            <div id="mapa" class="mapa"></div>
+            <div class="controls">
+                <div class="instructions">
+                    <div class="boton up" onclick="mover('arriba'); addInstruction('arriba')"></div>
+                    <div class="boton down" onclick="mover('abajo'); addInstruction('abajo')"></div>
+                    <div class="boton left" onclick="mover('izquierda'); addInstruction('izquierda')"></div>
+                    <div class="boton right" onclick="mover('derecha'); addInstruction('derecha')"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let instructions = [];
 
+        function addInstruction(direction) {
+            if (instructions.length > 0 && instructions[instructions.length - 1].name === direction) {
+                instructions[instructions.length - 1].count++;
+            } else {
+                instructions.push({ name: direction, count: 1 });
+            }
+            updateInstructionList();
+        }
+
+        function updateInstructionList() {
+            const list = document.getElementById('instruction-list');
+            list.innerHTML = instructions.map(inst => inst.count > 1 ? `${inst.name} x${inst.count}` : inst.name).join('<br>');
+        }
+    </script>
     <script>
         const laberinto = [ //LABERINTO, los 0 son camino libre, los 1 son muros
             [0, 1, 0, 0, 0, 1, 0, 0, 0, 0],

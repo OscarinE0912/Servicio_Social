@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laberinto Interactivo</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: url('NieveAncho.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+        .titulo {
+            font-size: 2em;
+            font-weight: bold;
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .boton-regresar {
+            background-color: #00bcf5;
+            color: white;
+            font-size: 1.2em;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .boton-regresar:hover {
+            background-color: #027a9e;
+        }
+
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 80px; /* Espacio para el menú superior */
+        }
+
+        .controls-container {
+            border: 2px solid #333;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        #controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            justify-content: center;
+        }
+
+        #controls button {
+            font-size: 24px;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #controls button:hover {
+            background-color: #45a049;
+        }
+
+        #command-list {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        #maze {
+            display: grid;
+            grid-template-columns: repeat(5, 50px);
+            grid-template-rows: repeat(5, 50px);
+            gap: 2px;
+            position: relative;
+            background-image: url('Agua.jpg');
+            background-size: cover;
+            padding: 10px;
+            border: 2px solid #333;
+        }
+
+        .cell {
+            width: 50px;
+            height: 50px;
+            background-size: cover;
+            background-image: url('plataforma.png');
+        }
+
+        .wall { background-image: url('pared.png'); }
+        .door { background-image: url('puerta.png'); }
+        .chest { background-image: url('cofre.png'); }
+        .goal { background-image: url('meta.png'); }
+        .player { background-image: url('drago.jpg'); }
+
+        #commands {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        #modal, #win-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #modal-content, #win-modal-content {
+            background: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .star {
+            font-size: 30px;
+        }
+
+        .gold { color: gold; }
+        .black { color: black; }
+
+        @keyframes shine {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .star.gold {
+            animation: shine 1s infinite;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Menú superior -->
+    <div class="header">
+        <button class="boton-regresar" onclick="window.location.href='inicio.html'">Regresar</button>
+        <div class="titulo">LABERINTO INTERACTIVO</div>
+    </div>
+
+    <!-- Contenedor del juego -->
+    <div class="game-container">
+        <!-- Contenedor para los botones de control -->
+        <div class="controls-container">
+            <div id="controls">
+                <button onclick="addCommand('up')">↑</button>
+                <button onclick="addCommand('down')">↓</button>
+                <button onclick="addCommand('left')">←</button>
+                <button onclick="addCommand('right')">→</button>
+            </div>
+        </div>
+
+        <!-- Contenedor para la lista de instrucciones -->
+        <div class="controls-container">
+            <div id="command-list"></div>
+        </div>
+
+        <!-- Laberinto -->
+        <div id="maze"></div>
+
+        <!-- Botón de inicio -->
+        <div id="commands">
+            <button onclick="startGame()">Iniciar</button>
+        </div>
+    </div>
+
+    <!-- Modales -->
+    <div id="modal">
+        <div id="modal-content">
+            <p id="question"></p>
+            <input type="number" id="answer">
+            <button onclick="checkAnswer()">Responder</button>
+        </div>
+    </div>
+
+    <div id="win-modal">
+        <div id="win-modal-content">
+            <h2>¡Nivel Completado!</h2>
+            <div>
+                <span id="star1" class="star">★</span>
+                <span id="star2" class="star">★</span>
+                <span id="star3" class="star">★</span>
+            </div>
+            <p>Metas:</p>
+            <ul>
+                <li id="goal-door">Pasar la puerta</li>
+                <li id="goal-chest">Conseguir el cofre</li>
+                <li id="goal-finish">Llegar a la meta</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const mazeData = [
+            [' ', ' ', ' ', ' ', ' '],
+            [' ', 'wall', 'wall', ' ', ' '],
+            [' ', 'door', ' ', 'chest', ' '],
+            [' ', 'wall', 'wall', ' ', ' '],
+            [' ', ' ', ' ', ' ', 'goal']
+        ];
+
+        const maze = document.getElementById("maze");
+        let playerPos = { x: 0, y: 0 };
+        let commands = [];
+        let correctAnswer = 0;
+        let commandIndex = 0;
+        let paused = false;
+        let passedDoor = false;
+        let gotChest = false;
+
+        function renderMaze() {
+            maze.innerHTML = '';
+            mazeData.forEach((row, y) => {
+                row.forEach((cell, x) => {
+                    const div = document.createElement("div");
+                    div.classList.add("cell");
+                    if (cell === 'wall') div.classList.add("wall");
+                    if (cell === 'door') div.classList.add("door");
+                    if (cell === 'chest') div.classList.add("chest");
+                    if (cell === 'goal') div.classList.add("goal");
+                    if (playerPos.x === x && playerPos.y === y) div.classList.add("player");
+                    maze.appendChild(div);
+                });
+            });
+        }
+
+        function addCommand(direction) {
+            if (commands.length > 0 && commands[commands.length - 1].direction === direction) {
+                commands[commands.length - 1].count++;
+            } else {
+                commands.push({ direction: direction, count: 1 });
+            }
+            updateCommandList();
+        }
+
+        function updateCommandList() {
+            const commandList = document.getElementById("command-list");
+            const arrows = commands.map(cmd => {
+                let arrow = '';
+                if (cmd.direction === 'up') arrow = '↑';
+                if (cmd.direction === 'down') arrow = '↓';
+                if (cmd.direction === 'left') arrow = '←';
+                if (cmd.direction === 'right') arrow = '→';
+                return cmd.count > 1 ? `${arrow} x${cmd.count}` : arrow;
+            });
+            commandList.innerText = arrows.join(' ');
+        }
+
+        function startGame() {
+            commandIndex = 0;
+            paused = false;
+            executeCommands();
+        }
+
+        function executeCommands() {
+            if (commandIndex >= commands.length || paused) return;
+
+            const currentCommand = commands[commandIndex];
+            if (currentCommand.count > 0) {
+                move(currentCommand.direction);
+                currentCommand.count--;
+            } else {
+                commandIndex++;
+            }
+
+            setTimeout(executeCommands, 500);
+        }
+
+        function move(direction) {
+            let newX = playerPos.x;
+            let newY = playerPos.y;
+
+            if (direction === 'up') newY--;
+            if (direction === 'down') newY++;
+            if (direction === 'left') newX--;
+            if (direction === 'right') newX++;
+
+            if (newX < 0 || newY < 0 || newX >= 5 || newY >= 5 || mazeData[newY][newX] === 'wall') return;
+            
+            playerPos.x = newX;
+            playerPos.y = newY;
+            renderMaze();
+
+            if (mazeData[newY][newX] === 'door' || mazeData[newY][newX] === 'chest') {
+                paused = true;
+                openModal(mazeData[newY][newX]);
+                return;
+            }
+
+            if (mazeData[newY][newX] === 'goal') {
+                showWinScreen();
+                return;
+            }
+        }
+
+        function openModal(type) {
+            document.getElementById("modal").style.display = "flex";
+            document.getElementById("question").innerText = generateQuestion();
+            if (type === 'door') passedDoor = true;
+            if (type === 'chest') gotChest = true;
+        }
+
+        function generateQuestion() {
+            let num1 = Math.floor(Math.random() * 10) + 1;
+            let num2 = Math.floor(Math.random() * 10) + 1;
+            correctAnswer = num1 + num2;
+            return `¿Cuánto es ${num1} + ${num2}?`;
+        }
+
+        function checkAnswer() {
+            let userAnswer = parseInt(document.getElementById("answer").value);
+            if (userAnswer === correctAnswer) {
+                document.getElementById("modal").style.display = "none";
+                paused = false;
+                setTimeout(executeCommands, 500);
+            } else {
+                alert("Respuesta incorrecta. Inténtalo de nuevo.");
+            }
+        }
+
+        function showWinScreen() {
+            document.getElementById("win-modal").style.display = "flex";
+            document.getElementById("star1").classList.add(passedDoor ? "gold" : "black");
+            document.getElementById("star2").classList.add(gotChest ? "gold" : "black");
+            document.getElementById("star3").classList.add("gold");
+        }
+
+        renderMaze();
+    </script>
+
+</body>
+</html>
