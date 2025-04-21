@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dificultad</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-image: url('IMAGENES/DesiertoAncho.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+            transition: background 0.5s ease-in-out;
+            margin: 0;
+        }
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+        .titulo {
+            font-size: 2em;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            text-align: center;
+            flex-grow: 1;
+        }
+        .boton-regresar {
+            background-color: #00bcf5;
+            color: white;
+            font-size: 1.2em;
+            font-family: Arial, sans-serif;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .boton-regresar:hover {
+            background-color: #027a9e;
+        }
+        .menu {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100vh;
+            margin-top: 60px;
+        }
+        .swiper {
+            width: 100%;
+            padding: 20px 0;
+        }
+        .swiper-slide {
+            width: 20%; /* Cada slide ocupa el 20% del ancho del contenedor */
+            height: 100vh; /* Ocupa toda la altura de la página */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background 0.3s;
+        }
+        .boton {
+            background-color: rgba(255, 111, 125, 0);
+            color: white;
+            font-size: 1.5em;
+            font-family: Arial, sans-serif;
+            border: none;
+            padding: 15px 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.3s;
+            text-shadow: 1px 0px 5px black,
+                         0px 1px 5px black,
+                        -1px 0px 5px black,
+                         0px -1px 5px black;
+            height: 100%; /* Ocupa toda la altura del slide */
+            width: 100%; /* Ocupa todo el ancho del slide */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .swiper-button-next, .swiper-button-prev {
+            color: white;
+        }    
+
+        /* Colores para los niveles 1-5 */
+        .swiper-slide:nth-child(1) { background-color: #357a3800; }
+        .swiper-slide:nth-child(2) { background-color: #357a3800; }
+        .swiper-slide:nth-child(3) { background-color: #357a3800; }
+        .swiper-slide:nth-child(4) { background-color: #357a3800; }
+        .swiper-slide:nth-child(5) { background-color: #357a3800; }
+        .swiper-slide:nth-child(1):hover { background-color: #c2b28080; }
+        .swiper-slide:nth-child(2):hover { background-color: #cc77227a; }
+        .swiper-slide:nth-child(3):hover { background-color: #b360477a; }
+        .swiper-slide:nth-child(4):hover { background-color: #966e3377; }
+        .swiper-slide:nth-child(5):hover { background-color: #e9ddc679; }
+
+        /* Colores para los niveles 6-10 */
+        .swiper-slide:nth-child(6) { background-color: #357a3800; }
+        .swiper-slide:nth-child(7) { background-color: #357a3800; }
+        .swiper-slide:nth-child(8) { background-color: #357a3800; }
+        .swiper-slide:nth-child(9) { background-color: #357a3800; }
+        .swiper-slide:nth-child(10) { background-color: #357a3800; }
+        .swiper-slide:nth-child(6):hover { background-color: #1b4d3e81; }
+        .swiper-slide:nth-child(7):hover { background-color: #4a772977; }
+        .swiper-slide:nth-child(8):hover { background-color: #6b3e267a; }
+        .swiper-slide:nth-child(9):hover { background-color: #3e7d347e; }
+        .swiper-slide:nth-child(10):hover { background-color: #c4a00071; }
+
+        /* Colores para los niveles 11-15 */
+        .swiper-slide:nth-child(11) { background-color: #357a3800; }
+        .swiper-slide:nth-child(12) { background-color: #357a3800; }
+        .swiper-slide:nth-child(13) { background-color: #357a3800; }
+        .swiper-slide:nth-child(14) { background-color: #357a3800; }
+        .swiper-slide:nth-child(15) { background-color: #357a3800; }
+        .swiper-slide:nth-child(11):hover { background-color: #a3d9ff75; }
+        .swiper-slide:nth-child(12):hover { background-color: #f8f9fa79; }
+        .swiper-slide:nth-child(13):hover { background-color: #74b3ce80; }
+        .swiper-slide:nth-child(14):hover { background-color: #dde3e9a1; }
+        .swiper-slide:nth-child(15):hover { background-color: #9be7dfa8; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <button class="boton-regresar" onclick="window.location.href='inicio.html'">Regresar</button>
+        <div class="titulo">Primer Nivel</div>
+    </div>
+
+    <div class="menu">
+        <div class="swiper">
+            <div class="swiper-wrapper">
+                <!--Prueba para linkear-->
+                <div class="swiper-slide"><button class="boton" onclick="window.location.href='Prueba.html'">Nivel 1</button></div>
+                
+                <div class="swiper-slide"><button class="boton">Nivel 2</button></div>
+                <div class="swiper-slide"><button class="boton">Nivel 3</button></div>
+                <div class="swiper-slide"><button class="boton">Nivel 4</button></div>
+                <div class="swiper-slide"><button class="boton">Nivel 5</button></div>
+                
+                <div class="swiper-slide"><button class="boton">Nivel 6</button></div>
+                <div class="swiper-slide"><button class="boton">Nivel 7</button></div>
+                <div class="swiper-slide"><button class="boton">Nivel 8</button></div>
+                <div class="swiper-slide"><button class="boton">Nivel 9</button></div>
+                <div class="swiper-slide"><button class="boton">Nivel 10</button></div>
+                
+                <div class="swiper-slide"><button class="boton">Nivel 11</button></div>
+                <div class="swiper-slide"><button class="boton">Nivel 12</button></div>
+                <div class="swiper-slide"><button class="boton">Nivel 13</button></div>
+                <div class="swiper-slide"><button class="boton">Nivel 14</button></div>
+                <div class="swiper-slide"><button class="boton">Nivel 15</button></div>
+            </div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var fondos = [
+                "url('IMAGENES/DesiertoAncho.jpg')", 
+                "url('IMAGENES/JunglaAncho.jpg')", 
+                "url('IMAGENES/NieveAncho.jpg')"
+            ];
+
+            var swiper = new Swiper('.swiper', {
+                slidesPerView: 5, // Muestra 5 slides a la vez
+                slidesPerGroup: 5, // Agrupa los slides de 5 en 5
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                    type: 'bullets',
+                },
+                navigation: { 
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                loop: false,
+                on: {
+                    slideChange: function () {
+                        var paginaActual = Math.floor(swiper.activeIndex / 5);
+                        if (paginaActual < fondos.length) {
+                            document.body.style.backgroundImage = fondos[paginaActual];
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

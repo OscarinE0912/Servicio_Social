@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú de Botones</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('IMAGENES/Desierto.jpg'), url('IMAGENES/Jungla.jpg'), url('IMAGENES/Hielo.jpg');
+            background-position: top left, top center, top right;
+            background-repeat: no-repeat, no-repeat, no-repeat;
+            background-size: 33.33%, 33.33%, 33.33%;
+            background-attachment: fixed;
+            margin: 0;
+        }
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 50px;
+            z-index: 1;
+        }
+        .boton {
+            background-color: #00bcf5;
+            color: white;
+            font-size: 600%;
+            font-family: Arial, sans-serif;
+            border: none;
+            padding: 15px 40px; 
+            border-radius: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .boton:hover {
+            background-color: #027a9e;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu">
+        <button class="boton" onclick="window.location.href='dificultad.html'">INICIAR</button>
+<!--        <button class="boton" onclick="window.location.href='opciones.html'">OPCIONES</button>  -->
+    </div>
+
+<!--Anadir sonido-->
+    <audio>
+        <source src="sonido.mp3" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio.   
+    </audio>
+    
+    <button id="audioBoton" class="Aver">
+        <img id="bocina" src="IMAGENES/bocina silencio.png" alt="Bocina" width="40" height="40">
+    </button>
+        <script>
+            // Crear el objeto de audio
+            const audio = new Audio("sonido.mp3");
+    
+            // Seleccionar el botón
+            const boton = document.getElementById("audioBoton");
+            const bocina = document.getElementById("bocina");
+    
+            // Agregar el evento de clic al botón
+            boton.addEventListener("click", function() {
+                if (audio.paused) {
+                    // Si el audio está pausado, reproducir
+                    audio.play();
+                    bocina.src="IMAGENES/bocina.png";   
+                    
+                } else {
+                    // Si el audio está reproduciéndose, pausar
+                    audio.pause();
+                    bocina.src="IMAGENES/bocina silencio.png";           
+                }
+            });
+        </script>
+    <style>
+        .Aver{
+            position: relative;
+            bottom: 445px;
+            left: 600px;
+            background-color: salmon;
+        }
+    </style>
+</body>
+</html>
+
