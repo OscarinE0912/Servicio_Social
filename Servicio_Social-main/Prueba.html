@@ -96,10 +96,20 @@
         }
 
         #command-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
             font-size: 24px;
             font-weight: bold;
-            margin-top: 10px;
-            text-align: center;
+            align-items: center;
+        }
+
+        #maze-container {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
         }
 
         #maze {
@@ -107,25 +117,57 @@
             grid-template-columns: repeat(5, 85px);
             grid-template-rows: repeat(5, 85px);
             gap: 2px;
-            position: relative;
             background-image: url('IMAGENES/Agua.jpg');
             background-size: cover;
             padding: 10px;
             border: 2px solid #333;
         }
 
+        #instructions, #command-list-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            font-size: 1.2em;
+            width: 150px;
+            text-align: center;
+        }
+
+        #instructions h3, #command-list-container h3 {
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
         .cell {
             width: 85px;
             height: 85px;
-            background-size: cover;
+            background-size: contain;  /* Cambiado de 'cover' a 'contain' */
+            background-repeat: no-repeat;
+            background-position: center center;
             background-image: url('IMAGENES/plataforma.png');
+            position: relative; /* Para elementos hijos si los añades */
         }
 
-        .wall { background-image: url('IMAGENES/pared.png'); }
-        .door { background-image: url('IMAGENES/puerta.png'); }
-        .chest { background-image: url('IMAGENES/cofre.png'); }
-        .goal { background-image: url('IMAGENES/meta.png'); }
-        .player { background-image: url('IMAGENES/drago.jpg'); }
+        .wall { 
+            background-image: url('IMAGENES/pared.png');
+            background-size: contain;
+        }
+        .door { 
+            background-image: url('IMAGENES/puerta.png');
+            background-size: contain;
+        }
+        .chest { 
+            background-image: url('IMAGENES/cofre.png');
+            background-size: contain;
+        }
+        .goal { 
+            background-image: url('IMAGENES/meta.png');
+            background-size: contain;
+        }
+        .player { 
+            background-image: url('IMAGENES/drago.jpg');
+            background-size: contain;
+        }
 
         #commands {
             margin-top: 10px;
@@ -166,6 +208,18 @@
         .star.gold {
             animation: shine 1s infinite;
         }
+
+        @keyframes blink {
+            0% { color: black; }
+            50% { color: gold; }
+            100% { color: black; }
+        }
+
+        .blink {
+            animation: blink 1s infinite;
+            font-weight: bold;
+        }
+
     </style>
 </head>
 <body>
@@ -188,13 +242,24 @@
             </div>
         </div>
 
-        <!-- Contenedor para la lista de instrucciones -->
-        <div class="controls-container">
-            <div id="command-list"></div>
-        </div>
-
         <!-- Laberinto -->
-        <div id="maze"></div>
+        <div id="maze-container">
+            <div id="instructions">
+                <h3>🎯 Objetivos</h3>
+                <ul>
+                    <li>Pasar la puerta</li>
+                    <li>Conseguir el cofre</li>
+                    <li>Llegar a la meta</li>
+                </ul>
+            </div>
+        
+            <div id="maze"></div>
+        
+            <div id="command-list-container">
+                <h3>🕹 Movimientos</h3>
+                <div id="command-list"></div>
+            </div>
+        </div>
 
         <!-- Botón de inicio -->
         <div id="commands">
@@ -211,7 +276,7 @@
         </div>
     </div>
 
-    <div id="win-modal">
+    <div id="win-modal" style="display:none;">
         <div id="win-modal-content">
             <h2>¡Nivel Completado!</h2>
             <div>
@@ -225,10 +290,30 @@
                 <li id="goal-chest">Conseguir el cofre</li>
                 <li id="goal-finish">Llegar a la meta</li>
             </ul>
+            <div style="margin-top: 20px;">
+                <button onclick="restartLevel()" style="margin: 5px; padding: 10px 20px;">🔁 Reiniciar Nivel</button>
+                <button onclick="nextLevel()" style="margin: 5px; padding: 10px 20px;">➡️ Siguiente Nivel</button>
+            </div>
         </div>
+    </div>
+    
+    
+
+    <div id="restart-message" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); 
+    background:white; padding:30px; border-radius:15px; font-size:2em; text-align:center; box-shadow:0 0 20px rgba(0,0,0,0.5);">
+        Te quedaste sin movimientos. ¡Intentémoslo de nuevo!
     </div>
 
     <script>
+        function restartLevel() {
+            location.reload();
+        }
+
+        function nextLevel() {
+            // Aquí pondrías la ruta de tu siguiente nivel, por ejemplo:
+            window.location.href = "nivel2.html";
+        }
+
         const mazeData = [
             [' ', ' ', ' ', ' ', ' '],
             [' ', 'wall', 'wall', ' ', ' '],
@@ -273,15 +358,19 @@
 
         function updateCommandList() {
             const commandList = document.getElementById("command-list");
-            const arrows = commands.map(cmd => {
+            commandList.innerHTML = '';
+
+            commands.forEach(cmd => {
                 let arrow = '';
                 if (cmd.direction === 'up') arrow = '↑';
                 if (cmd.direction === 'down') arrow = '↓';
                 if (cmd.direction === 'left') arrow = '←';
                 if (cmd.direction === 'right') arrow = '→';
-                return cmd.count > 1 ? `${arrow} x${cmd.count}` : arrow;
+
+                const div = document.createElement('div');
+                div.innerHTML = `${arrow} <strong>x${cmd.count}</strong>`;
+                commandList.appendChild(div);
             });
-            commandList.innerText = arrows.join(' ');
         }
 
         function startGame() {
@@ -291,7 +380,17 @@
         }
 
         function executeCommands() {
-            if (commandIndex >= commands.length || paused) return;
+            if (paused) return;
+
+            if (commandIndex >= commands.length) {
+                if (!(playerPos.x === 4 && playerPos.y === 4)) {
+                    document.getElementById("restart-message").style.display = "block";
+                    setTimeout(() => {
+                        location.reload();
+                    }, 3000); // Espera 3 segundos antes de reiniciar
+                }
+                return;
+            }
 
             const currentCommand = commands[commandIndex];
             if (currentCommand.count > 0) {
@@ -314,7 +413,7 @@
             if (direction === 'right') newX++;
 
             if (newX < 0 || newY < 0 || newX >= 5 || newY >= 5 || mazeData[newY][newX] === 'wall') return;
-            
+
             playerPos.x = newX;
             playerPos.y = newY;
             renderMaze();
@@ -326,6 +425,7 @@
             }
 
             if (mazeData[newY][newX] === 'goal') {
+                document.getElementById("goal-finish").classList.add("blink");
                 showWinScreen();
                 return;
             }
@@ -334,8 +434,14 @@
         function openModal(type) {
             document.getElementById("modal").style.display = "flex";
             document.getElementById("question").innerText = generateQuestion();
-            if (type === 'door') passedDoor = true;
-            if (type === 'chest') gotChest = true;
+            if (type === 'door') {
+                passedDoor = true;
+                document.getElementById("goal-door").classList.add("blink");
+            }
+            if (type === 'chest') {
+                gotChest = true;
+                document.getElementById("goal-chest").classList.add("blink");
+            }
         }
 
         function generateQuestion() {
@@ -362,6 +468,7 @@
             document.getElementById("star2").classList.add(gotChest ? "gold" : "black");
             document.getElementById("star3").classList.add("gold");
         }
+
 
         renderMaze();
     </script>
