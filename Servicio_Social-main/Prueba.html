@@ -129,7 +129,7 @@
             border-radius: 15px;
             box-shadow: 0 0 15px rgba(0,0,0,0.2);
             font-size: 1.2em;
-            width: 150px;
+            width: 198px;
             text-align: center;
         }
 
@@ -219,7 +219,33 @@
             animation: blink 1s infinite;
             font-weight: bold;
         }
+        .iniciar{
+            font-size: 24px;
+            width: auto;
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: whitesmoke;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            border: solid black 2px;
+            cursor: pointer;
+        }
+        .iniciar:hover{
+            background-color:  lightgray;
+        }
 
+        .mensaje-emergente{
+            display:none;   position:fixed; 
+            top:50%;    left:50%;
+            transform:translate(-50%, -50%); 
+            background:white;   padding:30px;   border-radius:15px; 
+            font-size:2em;text-align:center; 
+            box-shadow:0 0 20px rgba(0,0,0,0.5);
+        }
+        
     </style>
 </head>
 <body>
@@ -263,7 +289,7 @@
 
         <!-- Botón de inicio -->
         <div id="commands">
-            <button onclick="startGame()">Iniciar</button>
+            <button class="iniciar" onclick="startGame()">Iniciar</button>
         </div>
     </div>
 
@@ -295,16 +321,39 @@
                 <button onclick="nextLevel()" style="margin: 5px; padding: 10px 20px;">➡️ Siguiente Nivel</button>
             </div>
         </div>
-    </div>
-    
-    
+    </div>    
 
-    <div id="restart-message" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); 
-    background:white; padding:30px; border-radius:15px; font-size:2em; text-align:center; box-shadow:0 0 20px rgba(0,0,0,0.5);">
+    <div id="restart-message" class="mensaje-emergente">
         Te quedaste sin movimientos. ¡Intentémoslo de nuevo!
     </div>
 
+    <div id="tuto" class="mensaje-emergente">   <!--TUTORIAL-->
+        Presiona los botones!
+        <div id="controls">
+            <button >↑</button>arriba
+            <button >↓</button>abajo
+            <button >←</button>izquierda
+            <button >→</button>derecha
+        </div>       
+        <div style="display: flex; flex-direction: column; justify-content: center;  align-items: center; ">
+        <p>Dale al boton</p>
+        <button class="iniciar">Iniciar</button>
+        <P>Cuando estes listo</P>
+    </div>
+    <div><h5>Presiona el siguiente boton para comenzar a jugar  </h5> <button class="iniciar" onclick="terminar()">CONTINUAR</button> </div>
+
+    </div>
+
     <script>
+        function terminar(){
+            const tuto=document.getElementById("tuto");
+            tuto.style.display="none"
+        }
+        window.onload=()=>{
+            const tuto=document.getElementById("tuto");
+            tuto.style.display="block";
+        };
+
         function restartLevel() {
             location.reload();
         }
