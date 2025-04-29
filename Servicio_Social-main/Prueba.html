@@ -219,6 +219,11 @@
             animation: blink 1s infinite;
             font-weight: bold;
         }
+        @keyframes conti{
+            0%{background-color: whitesmoke}
+            50%{background-color: lime;}
+            100%{background-color:whitesmoke}
+        }
         .iniciar{
             font-size: 24px;
             width: auto;
@@ -233,10 +238,24 @@
             border: solid black 2px;
             cursor: pointer;
         }
-        .iniciar:hover{
-            background-color:  lightgray;
+        .continuar{
+            font-size: 24px;
+            width: auto;
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: whitesmoke;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            border: solid limegreen 3px;
+            cursor: pointer;
         }
-
+        .iniciar:hover {
+            background-color:  lightgrey;
+        }
+        .continuar:hover{ animation: conti 2s ease-in infinite; }
         .mensaje-emergente{
             display:none;   position:fixed; 
             top:50%;    left:50%;
@@ -340,7 +359,7 @@
         <button class="iniciar">Iniciar</button>
         <P>Cuando estes listo</P>
     </div>
-    <div><h5>Presiona el siguiente boton para comenzar a jugar  </h5> <button class="iniciar" onclick="terminar()">CONTINUAR</button> </div>
+    <div><h5>Presiona el siguiente boton para comenzar a jugar  </h5> <button class="continuar" onclick="terminar()">CONTINUAR</button> </div>
 
     </div>
 
