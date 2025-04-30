@@ -220,9 +220,9 @@
             font-weight: bold;
         }
         @keyframes conti{
-            0%{background-color: whitesmoke}
-            50%{background-color: lime;}
-            100%{background-color:whitesmoke}
+            0%{background-color: lime}
+            50%{background-color: limegreen;}
+            100%{background-color:lime}
         }
         .iniciar{
             font-size: 24px;
@@ -251,11 +251,9 @@
             border-radius: 5px;
             border: solid limegreen 3px;
             cursor: pointer;
+            animation: conti 2s ease-in infinite
         }
-        .iniciar:hover {
-            background-color:  lightgrey;
-        }
-        .continuar:hover{ animation: conti 2s ease-in infinite; }
+        .iniciar:hover {background-color:  lightgrey;}
         .mensaje-emergente{
             display:none;   position:fixed; 
             top:50%;    left:50%;
@@ -336,8 +334,8 @@
                 <li id="goal-finish">Llegar a la meta</li>
             </ul>
             <div style="margin-top: 20px;">
-                <button onclick="restartLevel()" style="margin: 5px; padding: 10px 20px;">🔁 Reiniciar Nivel</button>
-                <button onclick="nextLevel()" style="margin: 5px; padding: 10px 20px;">➡️ Siguiente Nivel</button>
+                <button onclick="changeLevel(1)" style="margin: 5px; padding: 10px 20px;">🔁 Reiniciar Nivel</button>
+                <button onclick="changeLevel(2)" style="margin: 5px; padding: 10px 20px;">➡️ Siguiente Nivel</button>
             </div>
         </div>
     </div>    
@@ -347,39 +345,61 @@
     </div>
 
     <div id="tuto" class="mensaje-emergente">   <!--TUTORIAL-->
-        Presiona los botones!
-        <div id="controls">
-            <button >↑</button>arriba
-            <button >↓</button>abajo
-            <button >←</button>izquierda
-            <button >→</button>derecha
-        </div>       
-        <div style="display: flex; flex-direction: column; justify-content: center;  align-items: center; ">
-        <p>Dale al boton</p>
-        <button class="iniciar">Iniciar</button>
-        <P>Cuando estes listo</P>
-    </div>
-    <div><h5>Presiona el siguiente boton para comenzar a jugar  </h5> <button class="continuar" onclick="terminar()">CONTINUAR</button> </div>
+        Este es tu personaje: <img style="width: 40px;" src="IMAGENES/drago.jpg" alt="jugador">
+        <div>
+            Piso <img style="width: 40px;" src="IMAGENES/plataforma.png" alt="suelo">
+            Pared <img style="width: 40px;" src="IMAGENES/pared.png" alt="pared">
+        </div>
+        <div><br>
+            Cofre <img style="width: 40px;" src="IMAGENES/cofre.png" alt="cofre">
+            Puerta <img style="width: 40px;" src="IMAGENES/puerta.png" alt="puerta">
+        </div><br>
+            Meta <img style="width: 40px;" src="IMAGENES/meta.png" alt="meta">
 
+        <div style="margin-top: 70px; display: flex; flex-direction: column; justify-content: center;  align-items: center; ">
+            <button class="iniciar" onclick="tutorial(1)">Siguiente</button>
+        </div>
+  
+
+        <div id="tuto2" class="mensaje-emergente" style="font-size: 30px;">  
+            <p>Presiona los botones!</p>
+            <div id="controls">
+                <button >↑</button>arriba
+                <button >↓</button>abajo
+                <button >←</button>izquierda
+                <button >→</button>derecha
+            </div>       
+            <div style=" display: flex; flex-direction: column; justify-content: center;  align-items: center;">
+                <p>Dale al boton</p>
+                <button class="iniciar">Iniciar</button>
+                <P >Para mover a tu personaje</P>
+            </div>
+            <div>
+                <h5>Presiona el siguiente boton para comenzar a jugar</h5> <button class="continuar" onclick="tutorial(2)">CONTINUAR</button>
+            </div>
+        </div>
     </div>
 
+    
     <script>
-        function terminar(){
-            const tuto=document.getElementById("tuto");
-            tuto.style.display="none"
-        }
-        window.onload=()=>{
+          window.onload=()=>{ //que aparezca el tutorial al cargar la pagina
             const tuto=document.getElementById("tuto");
             tuto.style.display="block";
         };
-
-        function restartLevel() {
-            location.reload();
+        function tutorial(parametro){
+            if(parametro==1){
+                const tuto=document.getElementById("tuto2");
+                tuto.style.display="block";
+            }else if(parametro==2){ //dejar de mostrar
+                tuto.style.display="none"
+            }
         }
-
-        function nextLevel() {
-            // Aquí pondrías la ruta de tu siguiente nivel, por ejemplo:
-            window.location.href = "nivel2.html";
+                
+// junte las funciones de reiniciar nivel y siguiente nivel
+        function changeLevel(parametro){
+            if(parametro==1){  //si es 1, reinicia el nivel
+                location.reload();
+            }else{window.location.href = "nivel2.html";}    //SINO, va al siguiente
         }
 
         const mazeData = [
