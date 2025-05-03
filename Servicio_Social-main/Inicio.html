@@ -43,48 +43,7 @@
 <body>
     <div class="menu">
         <button class="boton" onclick="window.location.href='dificultad.html'">INICIAR</button>
-<!--        <button class="boton" onclick="window.location.href='opciones.html'">OPCIONES</button>  -->
     </div>
-
-<!--Anadir sonido-->
-    <audio>
-        <source src="sonido.mp3" type="audio/mpeg">
-        Tu navegador no soporta el elemento de audio.   
-    </audio>
-    
-    <button id="audioBoton" class="Aver">
-        <img id="bocina" src="IMAGENES/bocina silencio.png" alt="Bocina" width="40" height="40">
-    </button>
-        <script>
-            // Crear el objeto de audio
-            const audio = new Audio("sonido.mp3");
-    
-            // Seleccionar el botón
-            const boton = document.getElementById("audioBoton");
-            const bocina = document.getElementById("bocina");
-    
-            // Agregar el evento de clic al botón
-            boton.addEventListener("click", function() {
-                if (audio.paused) {
-                    // Si el audio está pausado, reproducir
-                    audio.play();
-                    bocina.src="IMAGENES/bocina.png";   
-                    
-                } else {
-                    // Si el audio está reproduciéndose, pausar
-                    audio.pause();
-                    bocina.src="IMAGENES/bocina silencio.png";           
-                }
-            });
-        </script>
-    <style>
-        .Aver{
-            position: relative;
-            bottom: 445px;
-            left: 600px;
-            background-color: salmon;
-        }
-    </style>
 </body>
 </html>
 

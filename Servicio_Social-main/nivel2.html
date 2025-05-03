@@ -115,8 +115,8 @@
 
         #maze {
             display: grid;
-            grid-template-columns: repeat(5, 85px);
-            grid-template-rows: repeat(5, 85px);
+            grid-template-columns: repeat(6, 85px);
+            grid-template-rows: repeat(6, 85px);
             gap: 2px;
             background-image: url('IMAGENES/Agua.jpg');
             background-size: cover;
@@ -436,7 +436,7 @@
             switch (parametro){
                 case 1: location.reload();
                     break;
-                case 2: window.location.href = "nivel2.html";
+                case 2: window.location.href = "nivel3.html";
                     break;
                 default: print("Elije una de las 2 opciones");
                     break;
@@ -444,11 +444,12 @@
         }
 
         const mazeData = [
-            [' ', ' ', ' ', ' ', ' '],
-            [' ', 'wall', 'wall', ' ', ' '],
-            [' ', 'door', ' ', 'chest', ' '],
-            [' ', 'wall', 'wall', ' ', ' '],
-            [' ', ' ', ' ', ' ', 'goal']
+            [' ', 'wall', 'door', ' ', ' ', ' '],
+            [' ', ' ', ' ', 'wall', 'wall', ' '],
+            [' ', 'wall', 'wall', ' ', ' ', ' '],
+            [' ', ' ', ' ', ' ', 'wall', ' '],
+            [' ', ' ', 'wall', ' ', ' ', ' '],
+            [' ', 'wall', 'chest', ' ', 'wall', 'goal'],
         ];
 
         const maze = document.getElementById("maze");
@@ -512,7 +513,7 @@
             if (paused) return;
 
             if (commandIndex >= commands.length) {
-                if (!(playerPos.x == 4 && playerPos.y == 4 )) {
+                if (!(playerPos.x === 5 && playerPos.y === 5 )) {
                     document.getElementById("restart-message").style.display = "block";
                     setTimeout(() => {
                         location.reload();
@@ -541,7 +542,7 @@
             if (direction === 'left') newX--;
             if (direction === 'right') newX++;
 
-            if (newX < 0 || newY < 0 || newX >= 5 || newY >= 5 || mazeData[newY][newX] === 'wall') return;
+            if (newX < 0 || newY < 0 || newX >= 6 || newY >= 6 || mazeData[newY][newX] === 'wall') return;
 
             playerPos.x = newX;
             playerPos.y = newY;
@@ -574,10 +575,11 @@
         }
 
         function generateQuestion() {
-            let num1 = Math.floor(Math.random() * 10) + 1;
-            let num2 = Math.floor(Math.random() * 10) + 1;
-            correctAnswer = num1 + num2;
-            return `¿Cuánto es ${num1} + ${num2}?`;
+            let num1 = Math.floor(Math.random() * 15) + 1;
+            let num2 = Math.floor(Math.random() * 15) + 1;
+            correctAnswer = num1 - num2;
+            return `¿Cuánto es ${num1} - ${num2}?`;
+            
         }
 
         function checkAnswer() {
