@@ -17,6 +17,7 @@
             background-attachment: fixed;
             margin: 0;
             font-family: Arial, sans-serif;
+            transition: background-image 0.5s ease-in-out;
         }
 
         .header {
@@ -40,7 +41,7 @@
         }
 
         .boton-regresar {
-            background-color: #00bcf5;
+            background-color: var(--color-tema);
             color: white;
             font-size: 1.2em;
             border: none;
@@ -58,11 +59,11 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 80px; /* Espacio para el menú superior */
+            margin-top: 80px;
         }
 
         .controls-container {
-            border: 2px solid #333;
+            border: 2px solid var(--color-tema);
             background-color: #f9f9f9;
             padding: 15px;
             border-radius: 10px;
@@ -85,11 +86,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: rgb(126, 173, 243);
+            background-color: var(--color-tema);
             color: white;
-            border: 2px solid black;
             border-radius: 5px;
             cursor: pointer;
+            transition: background 0.3s;
         }
 
         #controls button:hover {
@@ -116,6 +117,7 @@
         @media (max-width: 768px) {
             #maze-container {
                 flex-direction: column;
+                align-items: center;
             }
             
             #instructions, #command-list-container {
@@ -126,13 +128,11 @@
 
         #maze {
             display: grid;
-            gap: 2px;
-            background-image: url('IMAGENES/Agua.jpg');
-            background-size: cover;
+            gap: 1px;
             padding: 10px;
-            border: 2px solid #333;
             max-width: 100%;
             overflow: auto;
+            background-color: rgba(0,0,0,0.1);
         }
 
         #instructions, #command-list-container {
@@ -152,37 +152,37 @@
         }
 
         .cell {
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center center;
-            background-image: url('IMAGENES/plataforma.png');
             position: relative;
             min-width: 30px;
             min-height: 30px;
-            /* Hacemos que las celdas sean cuadradas y flexibles */
             aspect-ratio: 1/1;
             width: 100%;
             height: auto;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center center;
+            transition: all 0.3s ease;
+            border: none !important;
         }
 
         .wall { 
-            background-image: url('IMAGENES/pared.png');
+            background-image: url('IMAGENES/Desierto/pared_desierto.png');
             background-size: contain;
         }
         .door { 
-            background-image: url('IMAGENES/puerta.png');
+            background-image: url('IMAGENES/Desierto/puerta_desierto.png');
             background-size: contain;
         }
         .chest { 
-            background-image: url('IMAGENES/cofre.png');
+            background-image: url('IMAGENES/Desierto/cofre_desierto.png');
             background-size: contain;
         }
         .goal { 
-            background-image: url('IMAGENES/meta.png');
+            background-image: url('IMAGENES/Desierto/meta_desierto.png');
             background-size: contain;
         }
         .player { 
-            background-image: url('IMAGENES/drago.jpg');
+            background-image: url('IMAGENES/Desierto/drago_desierto.png');
             background-size: contain;
         }
 
@@ -201,12 +201,15 @@
             display: none;
             align-items: center;
             justify-content: center;
+            z-index: 20;
         }
 
         #modal-content, #win-modal-content {
             background: white;
             padding: 20px;
+            border-radius: 10px;
             text-align: center;
+            max-width: 80%;
         }
 
         .star {
@@ -236,26 +239,34 @@
             animation: blink 1s infinite;
             font-weight: bold;
         }
-        @keyframes conti{
-            0%{background-color: rgb(126, 173, 243);}
-            50%{background-color: rgb(109, 168, 255);}
-            100%{background-color: rgb(126, 173, 243);}
+
+        @keyframes conti {
+            0% { background-color: rgb(126, 173, 243); }
+            50% { background-color: rgb(109, 168, 255); }
+            100% { background-color: rgb(126, 173, 243); }
         }
-        .iniciar{
+
+        .iniciar {
             font-size: 24px;
             width: auto;
             height: 55px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: rgb(126, 173, 243);
+            background-color: var(--color-tema);
             color: whitesmoke;
             border: none;
             border-radius: 5px;
             border: solid black 2px;
             cursor: pointer;
+            transition: background 0.3s;
         }
-        .continuar{
+
+        .iniciar:hover {
+            background-color: rgb(109, 168, 255);
+        }
+
+        .continuar {
             font-size: 24px;
             width: auto;
             height: 55px;
@@ -269,30 +280,31 @@
             animation: conti 10s infinite;
             border: 2px solid black;
         }
-        .iniciar:hover {background-color:  rgb(109, 168, 255);}
-        .mensaje-emergente{
-            display:none;   position:fixed; 
-            top:50%;    left:50%;
-            transform:translate(-50%, -50%); 
-            background:white;   padding:30px;   border-radius:15px; 
-            font-size:2em;text-align:center; 
-            box-shadow:0 0 20px rgba(0,0,0,0.5);
+
+        .mensaje-emergente {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            font-size: 2em;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            z-index: 30;
         }
+
         @keyframes tut {
-            0%{background-color: lightcyan;}
-            50%{background-color: lightblue;}
-            100%{background-color: lightcyan;}
+            0% { background-color: lightcyan; }
+            50% { background-color: lightblue; }
+            100% { background-color: lightcyan; }
         }
-        @keyframes tut2 {
-            0%{background-color: lightblue;}
-            50%{background-color: lightcyan;}
-            100%{background-color: lightblue;}
-        }
-        #tuto{
+
+        #tuto, #tuto2 {
             animation: tut 8s infinite;
         }
-        #tuto2{animation: tut 8s infinite;}
-
     </style>
 </head>
 <body>
@@ -301,13 +313,15 @@
     <div class="header">
         <button class="boton-regresar" onclick="window.location.href='inicio.html'">Regresar</button>
         <div class="titulo">LABERINTO INTERACTIVO</div>
-        <div style="margin-right: 70px;"><audio><!--Anadir sonido-->
-            <source src="sonido.mp3" type="audio/mpeg">
-            Tu navegador no soporta el elemento de audio.   
-        </audio>    
-        <button id="audioBoton">
-            <img id="bocina" src="IMAGENES/bocina silencio.png" alt="Bocina" width="40" height="40">
-        </button></div>
+        <div style="margin-right: 70px;">
+            <audio id="audioElement">
+                <source src="sonido.mp3" type="audio/mpeg">
+                Tu navegador no soporta el elemento de audio.   
+            </audio>    
+            <button id="audioBoton">
+                <img id="bocina" src="IMAGENES/bocina silencio.png" alt="Bocina" width="40" height="40">
+            </button>
+        </div>
     </div>
 
     <!-- Contenedor del juego -->
@@ -333,7 +347,7 @@
                 </ul>
             </div>
         
-            <div id="maze"></div>
+            <div id="maze" style="display: grid; gap: 2px; background-image: url('IMAGENES/Desierto/mapa__desierto.jpg'); background-size: cover; padding: 10px; border: 2px solid #333; max-width: 100%; overflow: auto;"></div>
         
             <div id="command-list-container">
                 <h3>🕹 Movimientos</h3>
@@ -351,7 +365,7 @@
     <div id="modal">
         <div id="modal-content">
             <p id="question"></p>
-            <input type="number" id="answer">
+            <input type="number" id="answer" min="0" step="1">
             <button onclick="checkAnswer()">Responder</button>
         </div>
     </div>
@@ -381,159 +395,259 @@
         Te quedaste sin movimientos. ¡Intentémoslo de nuevo!
     </div>
 
-    <div id="tuto" class="mensaje-emergente">   <!--TUTORIAL-->
-        Este es tu personaje: <img style="width: 40px;" src="IMAGENES/drago.jpg" alt="jugador">
+    <div id="tuto" class="mensaje-emergente">
+        Este es tu personaje: <div id="tuto-personaje" style="width: 40px; height: 40px; display: inline-block; background-size: contain; background-repeat: no-repeat;"></div>
         <div>
-            Piso <img style="width: 40px;" src="IMAGENES/plataforma.png" alt="suelo">
-            Pared <img style="width: 40px;" src="IMAGENES/pared.png" alt="pared">
+            Piso <div class="tuto-img" data-type="piso" style="width: 40px; height: 40px; display: inline-block; background-size: contain; background-repeat: no-repeat;"></div>
+            Pared <div class="tuto-img" data-type="pared" style="width: 40px; height: 40px; display: inline-block; background-size: contain; background-repeat: no-repeat;"></div>
         </div>
         <div><br>
-            Cofre <img style="width: 40px;" src="IMAGENES/cofre.png" alt="cofre">
-            Puerta <img style="width: 40px;" src="IMAGENES/puerta.png" alt="puerta">
+            Cofre <div class="tuto-img" data-type="cofre" style="width: 40px; height: 40px; display: inline-block; background-size: contain; background-repeat: no-repeat;"></div>
+            Puerta <div class="tuto-img" data-type="puerta" style="width: 40px; height: 40px; display: inline-block; background-size: contain; background-repeat: no-repeat;"></div>
         </div><br>
-            Meta <img style="width: 40px;" src="IMAGENES/meta.png" alt="meta">
-
-        <div style="margin-top: 70px; display: flex; flex-direction: column; justify-content: center;  align-items: center; ">
+            Meta <div class="tuto-img" data-type="meta" style="width: 40px; height: 40px; display: inline-block; background-size: contain; background-repeat: no-repeat;"></div>
+            
+        <div style="margin-top: 70px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
             <button class="iniciar" onclick="tutorial(1)">Siguiente</button>
-        </div>
-  
-
-        <div id="tuto2" class="mensaje-emergente" style="font-size: 30px;">  
-            <p>Presiona los botones!</p>
-            <div id="controls">
-                <button >↑</button>arriba
-                <button >↓</button>abajo
-                <button >←</button>izquierda
-                <button >→</button>derecha
-            </div>       
-            <div style=" display: flex; flex-direction: column; justify-content: center;  align-items: center;">
-                <p>Dale al boton</p>
-                <button class="iniciar">Iniciar</button>
-                <P >Para mover a tu personaje</P>
-            </div>
-            <div>
-                <h5>Presiona el siguiente boton para comenzar a jugar</h5> <button class="continuar" onclick="tutorial(2)">CONTINUAR</button>
-            </div>
         </div>
     </div>
 
-    
+    <div id="tuto2" class="mensaje-emergente" style="font-size: 30px;">  
+        <p>Presiona los botones!</p>
+        <div id="controls">
+            <button>↑</button>arriba
+            <button>↓</button>abajo
+            <button>←</button>izquierda
+            <button>→</button>derecha
+        </div>       
+        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <p>Dale al boton</p>
+            <button class="iniciar">Iniciar</button>
+            <p>Para mover a tu personaje</p>
+        </div>
+        <div>
+            <h5>Presiona el siguiente boton para comenzar a jugar</h5>
+            <button class="continuar" onclick="tutorial(2)">CONTINUAR</button>
+        </div>
+    </div>
 
-    
     <script>
-//audio
-        const audio = new Audio("sonido.mp3");    
-        const boton = document.getElementById("audioBoton");
-        const bocina = document.getElementById("bocina");    
-        boton.addEventListener("click", function() {
-            if (audio.paused) {
-                audio.play();
-                bocina.src="IMAGENES/bocina.png";      
-            } else {
-                audio.pause();
-                bocina.src="IMAGENES/bocina silencio.png";           
-            }
-        });
-
-        window.onload=()=>{ //que aparezca el tutorial al cargar la pagina
-            const tuto=document.getElementById("tuto");
-            tuto.style.display="block";
-        };
-        function tutorial(parametro){
-            if(parametro==1){
-                const tuto=document.getElementById("tuto2");
-                tuto.style.display="block";
-            }else{tuto.style.display="none";}
-        }
-                
-// junte las funciones de reiniciar nivel y siguiente nivel
-        function changeLevel(parametro){
-            // Resetear las variables de estado al cambiar de nivel
-            doorPassed = false;
-            chestCollected = false;
-            
-            switch (parametro){
-                case 1: 
-                    location.reload();
-                    break;
-                case 2: 
-                    window.location.href = "nivel2.html";
-                    break;
-                default: 
-                    console.log("Elije una de las 2 opciones");
-                    break;
-            }
-        }
-
-        // Constantes para tipos de celda
+        // ========== CONSTANTES Y CONFIGURACIÓN ==========
         const CELL_TYPES = {
-        EMPTY: ' ',
-        WALL: 'wall',
-        DOOR: 'door',
-        CHEST: 'chest', 
-        GOAL: 'goal'
+            EMPTY: ' ',
+            WALL: 'wall',
+            DOOR: 'door',
+            CHEST: 'chest', 
+            GOAL: 'goal'
         };
 
-        // Configuración del laberinto
-        const mazeData = [
-        [' ', ' ', ' ', ' ', ' '],
-        [' ', 'wall', 'wall', ' ', ' '],
-        [' ', 'door', ' ', 'chest', ' '],
-        [' ', 'wall', 'wall', ' ', ' '],
-        [' ', ' ', ' ', ' ', 'goal']
-        ];
+        const estilosMundos = {
+            1: { // Mundo Desierto
+                fondo: "url('IMAGENES/DesiertoAncho.jpg')",
+                mapa: "url('IMAGENES/Desierto/mapa_desierto.jpg')",
+                celdas: {
+                    piso: "url('IMAGENES/Desierto/plataforma_desierto.png')",
+                    pared: "url('IMAGENES/Desierto/pared_desierto.png')",
+                    puerta: "url('IMAGENES/Desierto/puerta_desierto.png')",
+                    cofre: "url('IMAGENES/Desierto/cofre_desierto.png')",
+                    meta: "url('IMAGENES/Desierto/meta_desierto.png')",
+                    personaje: "url('IMAGENES/Desierto/drago_desierto.png')",
+                    estiloExtra: {
+                        sombra: "0 2px 5px rgba(210, 180, 140, 0.3)" /* Sutil sombra en lugar de borde */
+                    }
+                },
+                colorTema: "#c2b280"
+            },
+            2: { // Mundo Jungla
+                fondo: "url('IMAGENES/JunglaAncho.jpg')",
+                mapa: "url('IMAGENES/Jungla/mapa_jungla.jpg')",
+                celdas: {
+                    piso: "url('IMAGENES/Jungla/plataforma_jungla.png')",
+                    pared: "url('IMAGENES/Jungla/pared_jungla.png')",
+                    puerta: "url('IMAGENES/Jungla/puerta_jungla.png')",
+                    cofre: "url('IMAGENES/Jungla/cofre_jungla.png')",
+                    meta: "url('IMAGENES/Jungla/meta_jungla.png')",
+                    personaje: "url('IMAGENES/Jungla/drago_jungla.png')",
+                    estiloExtra: {
+                        sombra: "0 2px 5px rgba(46, 139, 87, 0.3)"
+                    }
+                },
+                colorTema: "#4a7729"
+            },
+            3: { // Mundo Hielo
+                fondo: "url('IMAGENES/NieveAncho.jpg')",
+                mapa: "url('IMAGENES/Hielo/mapa_hielo.jpg')",
+                celdas: {
+                    piso: "url('IMAGENES/Hielo/plataforma_hielo.png')",
+                    pared: "url('IMAGENES/Hielo/pared_hielo.png')",
+                    puerta: "url('IMAGENES/Hielo/puerta_hielo.png')",
+                    cofre: "url('IMAGENES/Hielo/cofre_hielo.png')",
+                    meta: "url('IMAGENES/Hielo/meta_hielo.png')",
+                    personaje: "url('IMAGENES/Hielo/drago_hielo.png')",
+                    estiloExtra: {
+                        sombra: "0 2px 5px rgba(163, 217, 255, 0.3)"
+                    }
+                },
+                colorTema: "#a3d9ff"
+            }
+        };
 
-        // Variables de estado
-        const mazeCols = mazeData[0].length;
-        const mazeRows = mazeData.length;
-        let cellSize = calculateOptimalCellSize();
+        // ========== VARIABLES DEL JUEGO ==========
+        let mazeData = [];
+        let correctAnswer = 0;
+        let mazeCols = 0;
+        let mazeRows = 0;
+        let cellSize = 0;
         let playerPos = { x: 0, y: 0 };
-        let goalPos = findGoalPosition();
+        let goalPos = { x: 0, y: 0 };
         let commands = [];
         let commandIndex = 0;
         let paused = false;
         let doorPassed = false;
         let chestCollected = false;
+        let dificultad = 1;
+        let mundo = 1;
 
-        // Función optimizada para encontrar la meta
-        function findGoalPosition() {
-        for (let y = 0; y < mazeRows; y++) {
-            for (let x = 0; x < mazeCols; x++) {
-            if (mazeData[y][x] === CELL_TYPES.GOAL) {
-                return { x, y };
+        // ========== FUNCIONES PRINCIPALES ==========
+        window.onload = function() {
+            // Configuración inicial
+            dificultad = parseInt(localStorage.getItem('dificultad')) || 1;
+            mundo = parseInt(localStorage.getItem('mundo')) || 1;
+            
+            // Configurar audio
+            const audio = document.getElementById('audioElement');
+            const boton = document.getElementById("audioBoton");
+            const bocina = document.getElementById("bocina");
+            
+            boton.addEventListener("click", function() {
+                if (audio.paused) {
+                    audio.play();
+                    bocina.src = "IMAGENES/bocina.png";
+                } else {
+                    audio.pause();
+                    bocina.src = "IMAGENES/bocina silencio.png";
+                }
+            });
+            
+            // Configurar laberinto
+            configurarLaberinto(mundo);
+            
+            // Mostrar tutorial
+            const tuto = document.getElementById("tuto");
+            tuto.style.display = "block";
+        };
+
+        function configurarLaberinto(mundo) {
+            const estilo = estilosMundos[mundo] || estilosMundos[1];
+            
+            // Cambiar fondo y tema
+            document.body.style.backgroundImage = estilo.fondo;
+            document.documentElement.style.setProperty('--color-tema', estilo.colorTema);
+            
+            // Configurar diseño del laberinto
+            switch(mundo) {
+                case 1: // Desierto
+                    document.getElementById("maze").style.backgroundImage = estilo.mapa;
+                    actualizarTutorial(estilo.celdas);
+                    mazeData = [
+                        [' ', ' ', ' ', ' ', ' '],
+                        [' ', 'wall', 'wall', ' ', ' '],
+                        [' ', 'door', ' ', 'chest', ' '],
+                        [' ', 'wall', 'wall', ' ', ' '],
+                        [' ', ' ', ' ', ' ', 'goal']
+                    ];
+                    break;
+                    
+                case 2: // Jungla
+                    document.getElementById("maze").style.backgroundImage = estilo.mapa;
+                    actualizarTutorial(estilo.celdas);
+                    mazeData = [
+                        [' ', 'wall', ' ', ' ', ' '],
+                        [' ', 'wall', ' ', 'chest', ' '],
+                        [' ', 'wall', 'door', 'wall', ' '],
+                        [' ', ' ', ' ', 'wall', ' '],
+                        ['chest', 'wall', ' ', ' ', 'goal']
+                    ];
+                    break;
+                    
+                case 3: // Hielo
+                    document.getElementById("maze").style.backgroundImage = estilo.mapa;
+                    actualizarTutorial(estilo.celdas);
+                    mazeData = [
+                        [' ', 'wall', 'wall', 'wall', ' '],
+                        [' ', ' ', 'door', ' ', ' '],
+                        ['wall', ' ', 'chest', ' ', 'wall'],
+                        [' ', ' ', ' ', ' ', ' '],
+                        [' ', 'wall', 'wall', ' ', 'goal']
+                    ];
+                    break;
             }
-            }
-        }
-        return { x: mazeCols - 1, y: mazeRows - 1 };
+            
+            // Recalcular y renderizar
+            mazeCols = mazeData[0].length;
+            mazeRows = mazeData.length;
+            cellSize = calculateOptimalCellSize();
+            playerPos = { x: 0, y: 0 };
+            goalPos = findGoalPosition();
+            renderMaze();
         }
 
-        // Función mejorada para manejar interacciones
-        function handleCellInteractions(x, y) {
-        const cellType = mazeData[y][x];
-        
-        switch(cellType) {
-            case CELL_TYPES.DOOR:
-            if (!doorPassed) {
-                paused = true;
-                doorPassed = true;
-                openModal('door');
-            }
-            break;
+        function renderMaze() {
+            const maze = document.getElementById("maze");
+            maze.innerHTML = '';
             
-            case CELL_TYPES.CHEST:
-            if (!chestCollected) {
-                paused = true;
-                chestCollected = true;
-                openModal('chest');
-            }
-            break;
+            maze.style.gridTemplateColumns = `repeat(${mazeCols}, ${cellSize}px)`;
+            maze.style.gridTemplateRows = `repeat(${mazeRows}, ${cellSize}px)`;
             
-            case CELL_TYPES.GOAL:
-            paused = true;
-            document.getElementById("goal-finish").classList.add("blink");
-            showWinScreen();
-            break;
+            const estilo = estilosMundos[mundo] || estilosMundos[1];
+            maze.style.backgroundImage = estilo.mapa;
+            maze.style.boxShadow = estilo.celdas.estiloExtra.sombra;
+
+            mazeData.forEach((row, y) => {
+                row.forEach((cell, x) => {
+                    const cellElement = document.createElement("div");
+                    cellElement.className = "cell";
+                    cellElement.style.backgroundImage = estilo.celdas.piso;
+                    
+                    // Eliminamos cualquier referencia a bordes
+                    if (cell === CELL_TYPES.WALL) {
+                        cellElement.classList.add("wall");
+                        cellElement.style.backgroundImage = estilo.celdas.pared;
+                    }
+                    if (cell === CELL_TYPES.DOOR) {
+                        cellElement.classList.add("door");
+                        cellElement.style.backgroundImage = estilo.celdas.puerta;
+                    }
+                    if (cell === CELL_TYPES.CHEST) {
+                        cellElement.classList.add("chest");
+                        cellElement.style.backgroundImage = estilo.celdas.cofre;
+                    }
+                    if (cell === CELL_TYPES.GOAL) {
+                        cellElement.classList.add("goal");
+                        cellElement.style.backgroundImage = estilo.celdas.meta;
+                    }
+                    if (playerPos.x === x && playerPos.y === y) {
+                        cellElement.classList.add("player");
+                        cellElement.style.backgroundImage = estilo.celdas.personaje;
+                    }
+                    
+                    maze.appendChild(cellElement);
+                });
+            });
         }
+
+        function actualizarTutorial(estilos) {
+            const tutorial = document.getElementById("tuto");
+            tutorial.style.borderColor = estilos.estiloExtra.colorBorde;
+            tutorial.style.boxShadow = estilos.estiloExtra.sombra;
+
+            document.getElementById('tuto-personaje').style.backgroundImage = estilos.personaje;
+            
+            document.querySelectorAll('.tuto-img').forEach(img => {
+                const type = img.getAttribute('data-type');
+                img.style.backgroundImage = estilos[type];
+                img.style.border = `1px solid ${estilos.estiloExtra.colorBorde}`;
+            });
         }
 
         function calculateOptimalCellSize() {
@@ -542,31 +656,17 @@
             return Math.max(30, maxSize);
         }
 
-        function renderMaze() {
-            maze.innerHTML = '';
-            
-            // Configuración dinámica del grid
-            maze.style.gridTemplateColumns = `repeat(${mazeCols}, ${cellSize}px)`;
-            maze.style.gridTemplateRows = `repeat(${mazeRows}, ${cellSize}px)`;
-            
-            mazeData.forEach((row, y) => {
-                row.forEach((cell, x) => {
-                    const cellElement = document.createElement("div");
-                    cellElement.className = "cell";
-                    
-                    // Añade clases según el tipo de celda
-                    if (cell === 'wall') cellElement.classList.add("wall");
-                    if (cell === 'door') cellElement.classList.add("door");
-                    if (cell === 'chest') cellElement.classList.add("chest");
-                    if (cell === 'goal') cellElement.classList.add("goal");
-                    if (playerPos.x === x && playerPos.y === y) cellElement.classList.add("player");
-                    
-                    maze.appendChild(cellElement);
-                });
-            });
+        function findGoalPosition() {
+            for (let y = 0; y < mazeRows; y++) {
+                for (let x = 0; x < mazeCols; x++) {
+                    if (mazeData[y][x] === CELL_TYPES.GOAL) {
+                        return { x, y };
+                    }
+                }
+            }
+            return { x: mazeCols - 1, y: mazeRows - 1 };
         }
 
-        // Función para manejar el redimensionamiento de la ventana
         window.addEventListener('resize', () => {
             const newSize = calculateOptimalCellSize();
             if (newSize !== cellSize) {
@@ -575,6 +675,7 @@
             }
         });
 
+        // ========== FUNCIONES DE JUEGO ==========
         function addCommand(direction) {
             if (commands.length > 0 && commands[commands.length - 1].direction === direction) {
                 commands[commands.length - 1].count++;
@@ -610,12 +711,12 @@
         function executeCommands() {
             if (paused) return;
 
-            if (playerPos.x === 4 && playerPos.y === 4) {
+            if (playerPos.x === goalPos.x && playerPos.y === goalPos.y) {
                 return;
             }
 
             if (commandIndex >= commands.length) {
-                if (!(playerPos.x == goalPos && playerPos.y == goalPos)) {
+                if (!(playerPos.x === goalPos.x && playerPos.y === goalPos.y)) {
                     document.getElementById("restart-message").style.display = "block";
                     setTimeout(() => {
                         location.reload();
@@ -641,7 +742,6 @@
             let newX = playerPos.x;
             let newY = playerPos.y;
 
-            // Actualiza posición según dirección
             switch(direction) {
                 case 'up': newY--; break;
                 case 'down': newY++; break;
@@ -649,48 +749,124 @@
                 case 'right': newX++; break;
             }
 
-            // Verifica límites y obstáculos
             if (newX < 0 || newY < 0 || newX >= mazeCols || newY >= mazeRows || 
-                mazeData[newY][newX] === 'wall') {
+                mazeData[newY][newX] === CELL_TYPES.WALL) {
                 return;
             }
 
-            // Actualiza posición del jugador
             playerPos = { x: newX, y: newY };
             renderMaze();
-
-            // Maneja interacciones con objetos
             handleCellInteractions(newX, newY);
+        }
+
+        function handleCellInteractions(x, y) {
+            const cellType = mazeData[y][x];
+            
+            switch(cellType) {
+                case CELL_TYPES.DOOR:
+                    if (!doorPassed) {
+                        paused = true;
+                        doorPassed = true;
+                        openModal('door');
+                    }
+                    break;
+                    
+                case CELL_TYPES.CHEST:
+                    if (!chestCollected) {
+                        paused = true;
+                        chestCollected = true;
+                        openModal('chest');
+                    }
+                    break;
+                    
+                case CELL_TYPES.GOAL:
+                    paused = true;
+                    document.getElementById("goal-finish").classList.add("blink");
+                    showWinScreen();
+                    break;
+            }
         }
 
         function openModal(type) {
             document.getElementById("modal").style.display = "flex";
             document.getElementById("question").innerText = generateQuestion();
             if (type === 'door') {
-                passedDoor = true;
                 document.getElementById("goal-door").classList.add("blink");
             }
             if (type === 'chest') {
-                gotChest = true;
                 document.getElementById("goal-chest").classList.add("blink");
             }
         }
 
         function generateQuestion() {
-            let num1 = Math.floor(Math.random() * 10) + 1;
-            let num2 = Math.floor(Math.random() * 10) + 1;
-            correctAnswer = num1 + num2;
-            return `¿Cuánto es ${num1} + ${num2}?`;
+            let num1, num2, operador;
+            
+            switch(dificultad) {
+                case 1: // Nivel fácil (6-7 años)
+                    num1 = Math.floor(Math.random() * 5) + 1;
+                    num2 = Math.floor(Math.random() * 5) + 1;
+                    operador = '+';
+                    correctAnswer = num1 + num2;
+                    break;
+                    
+                case 2: // Nivel medio (8-9 años)
+                    num1 = Math.floor(Math.random() * 10) + 1;
+                    num2 = Math.floor(Math.random() * 10) + 1;
+                    if (Math.random() > 0.5) {
+                        operador = '+';
+                        correctAnswer = num1 + num2;
+                    } else {
+                        operador = '-';
+                        if (num1 < num2) [num1, num2] = [num2, num1];
+                        correctAnswer = num1 - num2;
+                    }
+                    break;
+                    
+                case 3: // Nivel difícil (10-11 años)
+                    const operaciones = ['+', '-', '*'];
+                    operador = operaciones[Math.floor(Math.random() * operaciones.length)];
+                    
+                    switch(operador) {
+                        case '+':
+                            num1 = Math.floor(Math.random() * 15) + 1;
+                            num2 = Math.floor(Math.random() * 15) + 1;
+                            correctAnswer = num1 + num2;
+                            break;
+                        case '-':
+                            num1 = Math.floor(Math.random() * 20) + 1;
+                            num2 = Math.floor(Math.random() * num1) + 1;
+                            correctAnswer = num1 - num2;
+                            break;
+                        case '*':
+                            num1 = Math.floor(Math.random() * 10) + 1;
+                            num2 = Math.floor(Math.random() * 10) + 1;
+                            correctAnswer = num1 * num2;
+                            break;
+                    }
+                    break;
+            }
+            
+            return `¿Cuánto es ${num1} ${operador} ${num2}?`;
         }
 
         function checkAnswer() {
-            let userAnswer = parseInt(document.getElementById("answer").value);
+            const answerInput = document.getElementById("answer");
+            let userAnswer = parseInt(answerInput.value);
+            
+            if (isNaN(userAnswer)) {
+                alert("Por favor ingresa un número válido");
+                return;
+            }
+
             if (userAnswer === correctAnswer) {
                 document.getElementById("modal").style.display = "none";
                 paused = false;
+                answerInput.value = "";
                 setTimeout(executeCommands, 500);
             } else {
                 alert("Respuesta incorrecta. Inténtalo de nuevo.");
+                answerInput.value = "";
+                answerInput.focus();
             }
         }
 
@@ -701,9 +877,27 @@
             document.getElementById("star3").classList.add("gold");
         }
 
+        function changeLevel(parametro) {
+            doorPassed = false;
+            chestCollected = false;
+            
+            if (parametro === 2) {
+                mundo = (mundo % 3) + 1;
+                localStorage.setItem('mundo', mundo);
+            }
+            
+            location.reload();
+        }
 
-        renderMaze();
+        function tutorial(parametro) {
+            if (parametro == 1) {
+                const tuto = document.getElementById("tuto2");
+                document.getElementById("tuto").style.display = "none";
+                tuto.style.display = "block";
+            } else {
+                document.getElementById("tuto2").style.display = "none";
+            }
+        }
     </script>
-
 </body>
 </html>

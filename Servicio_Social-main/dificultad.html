@@ -101,21 +101,29 @@
         <div class="titulo">ELIJE UN NIVEL DE DIFICULTAD</div>
     </div>
     <div class="menu">
-
-        <button class="boton" onclick="window.location.href='Mundos1.html'">Nivel 1
+        <button class="boton" onclick="irANivel(1)">Nivel 1
             <p style="font-size: 30px;">6-7 Años</p>
             <p style="font-size: 20px;">1-2do primaria</p>
         </button>
 
-
-        <button class="boton" onclick="window.location.href='Mundos1.html'">Nivel 2
+        <button class="boton" onclick="irANivel(2)">Nivel 2
             <p style="font-size: 30px;">8-9 Años</p>
             <p style="font-size: 20px;">3-4to primaria</p>
         </button>
-        <button class="boton"onclick="window.location.href='Mundos1.html'">Nivel 3
-            <p style="font-size: 30px;">10-11 Años </p>
+
+        <button class="boton" onclick="irANivel(3)">Nivel 3
+            <p style="font-size: 30px;">10-11 Años</p>
             <p style="font-size: 20px;">5-6to primaria</p>
         </button>
     </div>
+
+    <script>
+        function irANivel(nivel) {
+            // Guardamos la dificultad en localStorage
+            localStorage.setItem('dificultad', nivel);
+            // Redirigimos a la página de mundos
+            window.location.href = 'Mundos1.html';
+        }
+    </script>
 </body>
 </html>
