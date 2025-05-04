@@ -113,15 +113,26 @@
             margin-top: 20px;
         }
 
+        @media (max-width: 768px) {
+            #maze-container {
+                flex-direction: column;
+            }
+            
+            #instructions, #command-list-container {
+                width: 100%;
+                max-width: 350px;
+            }
+        }
+
         #maze {
             display: grid;
-            grid-template-columns: repeat(5, 85px);
-            grid-template-rows: repeat(5, 85px);
             gap: 2px;
             background-image: url('IMAGENES/Agua.jpg');
             background-size: cover;
             padding: 10px;
             border: 2px solid #333;
+            max-width: 100%;
+            overflow: auto;
         }
 
         #instructions, #command-list-container {
@@ -141,13 +152,17 @@
         }
 
         .cell {
-            width: 85px;
-            height: 85px;
-            background-size: contain;  /* Cambiado de 'cover' a 'contain' */
+            background-size: contain;
             background-repeat: no-repeat;
             background-position: center center;
             background-image: url('IMAGENES/plataforma.png');
-            position: relative; /* Para elementos hijos si los añades */
+            position: relative;
+            min-width: 30px;
+            min-height: 30px;
+            /* Hacemos que las celdas sean cuadradas y flexibles */
+            aspect-ratio: 1/1;
+            width: 100%;
+            height: auto;
         }
 
         .wall { 
@@ -433,48 +448,132 @@
                 
 // junte las funciones de reiniciar nivel y siguiente nivel
         function changeLevel(parametro){
+            // Resetear las variables de estado al cambiar de nivel
+            doorPassed = false;
+            chestCollected = false;
+            
             switch (parametro){
-                case 1: location.reload();
+                case 1: 
+                    location.reload();
                     break;
-                case 2: window.location.href = "nivel2.html";
+                case 2: 
+                    window.location.href = "nivel2.html";
                     break;
-                default: print("Elije una de las 2 opciones");
+                default: 
+                    console.log("Elije una de las 2 opciones");
                     break;
             }
         }
 
+        // Constantes para tipos de celda
+        const CELL_TYPES = {
+        EMPTY: ' ',
+        WALL: 'wall',
+        DOOR: 'door',
+        CHEST: 'chest', 
+        GOAL: 'goal'
+        };
+
+        // Configuración del laberinto
         const mazeData = [
-            [' ', ' ', ' ', ' ', ' '],
-            [' ', 'wall', 'wall', ' ', ' '],
-            [' ', 'door', ' ', 'chest', ' '],
-            [' ', 'wall', 'wall', ' ', ' '],
-            [' ', ' ', ' ', ' ', 'goal']
+        [' ', ' ', ' ', ' ', ' '],
+        [' ', 'wall', 'wall', ' ', ' '],
+        [' ', 'door', ' ', 'chest', ' '],
+        [' ', 'wall', 'wall', ' ', ' '],
+        [' ', ' ', ' ', ' ', 'goal']
         ];
 
-        const maze = document.getElementById("maze");
+        // Variables de estado
+        const mazeCols = mazeData[0].length;
+        const mazeRows = mazeData.length;
+        let cellSize = calculateOptimalCellSize();
         let playerPos = { x: 0, y: 0 };
+        let goalPos = findGoalPosition();
         let commands = [];
-        let correctAnswer = 0;
         let commandIndex = 0;
         let paused = false;
-        let passedDoor = false;
-        let gotChest = false;
+        let doorPassed = false;
+        let chestCollected = false;
+
+        // Función optimizada para encontrar la meta
+        function findGoalPosition() {
+        for (let y = 0; y < mazeRows; y++) {
+            for (let x = 0; x < mazeCols; x++) {
+            if (mazeData[y][x] === CELL_TYPES.GOAL) {
+                return { x, y };
+            }
+            }
+        }
+        return { x: mazeCols - 1, y: mazeRows - 1 };
+        }
+
+        // Función mejorada para manejar interacciones
+        function handleCellInteractions(x, y) {
+        const cellType = mazeData[y][x];
+        
+        switch(cellType) {
+            case CELL_TYPES.DOOR:
+            if (!doorPassed) {
+                paused = true;
+                doorPassed = true;
+                openModal('door');
+            }
+            break;
+            
+            case CELL_TYPES.CHEST:
+            if (!chestCollected) {
+                paused = true;
+                chestCollected = true;
+                openModal('chest');
+            }
+            break;
+            
+            case CELL_TYPES.GOAL:
+            paused = true;
+            document.getElementById("goal-finish").classList.add("blink");
+            showWinScreen();
+            break;
+        }
+        }
+
+        function calculateOptimalCellSize() {
+            const maxCells = Math.max(mazeCols, mazeRows);
+            const maxSize = Math.min(85, Math.floor(window.innerWidth * 0.8 / maxCells));
+            return Math.max(30, maxSize);
+        }
 
         function renderMaze() {
             maze.innerHTML = '';
+            
+            // Configuración dinámica del grid
+            maze.style.gridTemplateColumns = `repeat(${mazeCols}, ${cellSize}px)`;
+            maze.style.gridTemplateRows = `repeat(${mazeRows}, ${cellSize}px)`;
+            
             mazeData.forEach((row, y) => {
                 row.forEach((cell, x) => {
-                    const div = document.createElement("div");
-                    div.classList.add("cell");
-                    if (cell === 'wall') div.classList.add("wall");
-                    if (cell === 'door') div.classList.add("door");
-                    if (cell === 'chest') div.classList.add("chest");
-                    if (cell === 'goal') div.classList.add("goal");
-                    if (playerPos.x === x && playerPos.y === y) div.classList.add("player");
-                    maze.appendChild(div);
+                    const cellElement = document.createElement("div");
+                    cellElement.className = "cell";
+                    
+                    // Añade clases según el tipo de celda
+                    if (cell === 'wall') cellElement.classList.add("wall");
+                    if (cell === 'door') cellElement.classList.add("door");
+                    if (cell === 'chest') cellElement.classList.add("chest");
+                    if (cell === 'goal') cellElement.classList.add("goal");
+                    if (playerPos.x === x && playerPos.y === y) cellElement.classList.add("player");
+                    
+                    maze.appendChild(cellElement);
                 });
             });
         }
+
+        // Función para manejar el redimensionamiento de la ventana
+        window.addEventListener('resize', () => {
+            const newSize = calculateOptimalCellSize();
+            if (newSize !== cellSize) {
+                cellSize = newSize;
+                renderMaze();
+            }
+        });
 
         function addCommand(direction) {
             if (commands.length > 0 && commands[commands.length - 1].direction === direction) {
@@ -511,12 +610,16 @@
         function executeCommands() {
             if (paused) return;
 
+            if (playerPos.x === 4 && playerPos.y === 4) {
+                return;
+            }
+
             if (commandIndex >= commands.length) {
-                if (!(playerPos.x == 4 && playerPos.y == 4 )) {
+                if (!(playerPos.x == goalPos && playerPos.y == goalPos)) {
                     document.getElementById("restart-message").style.display = "block";
                     setTimeout(() => {
                         location.reload();
-                    }, 3000); // Espera 3 segundos antes de reiniciar
+                    }, 3000);
                 }
                 return;
             }
@@ -533,31 +636,31 @@
         }
 
         function move(direction) {
+            if (playerPos.x === goalPos.x && playerPos.y === goalPos.y) return;
+
             let newX = playerPos.x;
             let newY = playerPos.y;
 
-            if (direction === 'up') newY--;
-            if (direction === 'down') newY++;
-            if (direction === 'left') newX--;
-            if (direction === 'right') newX++;
+            // Actualiza posición según dirección
+            switch(direction) {
+                case 'up': newY--; break;
+                case 'down': newY++; break;
+                case 'left': newX--; break;
+                case 'right': newX++; break;
+            }
 
-            if (newX < 0 || newY < 0 || newX >= 5 || newY >= 5 || mazeData[newY][newX] === 'wall') return;
+            // Verifica límites y obstáculos
+            if (newX < 0 || newY < 0 || newX >= mazeCols || newY >= mazeRows || 
+                mazeData[newY][newX] === 'wall') {
+                return;
+            }
 
-            playerPos.x = newX;
-            playerPos.y = newY;
+            // Actualiza posición del jugador
+            playerPos = { x: newX, y: newY };
             renderMaze();
 
-            if (mazeData[newY][newX] === 'door' || mazeData[newY][newX] === 'chest') {
-                paused = true;
-                openModal(mazeData[newY][newX]);
-                return;
-            }
-
-            if (mazeData[newY][newX] === 'goal') {
-                document.getElementById("goal-finish").classList.add("blink");
-                showWinScreen();
-                return;
-            }
+            // Maneja interacciones con objetos
+            handleCellInteractions(newX, newY);
         }
 
         function openModal(type) {
@@ -593,8 +696,8 @@
 
         function showWinScreen() {
             document.getElementById("win-modal").style.display = "flex";
-            document.getElementById("star1").classList.add(passedDoor ? "gold" : "black");
-            document.getElementById("star2").classList.add(gotChest ? "gold" : "black");
+            document.getElementById("star1").classList.add(doorPassed ? "gold" : "black");
+            document.getElementById("star2").classList.add(chestCollected ? "gold" : "black");
             document.getElementById("star3").classList.add("gold");
         }
 
