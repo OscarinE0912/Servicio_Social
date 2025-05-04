@@ -305,6 +305,18 @@
         #tuto, #tuto2 {
             animation: tut 8s infinite;
         }
+
+        .level-indicator {
+            position: fixed;
+            top: 80px;
+            left: 20px;
+            background-color: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            font-weight: bold;
+            z-index: 5;
+        }
     </style>
 </head>
 <body>
@@ -323,6 +335,9 @@
             </button>
         </div>
     </div>
+
+    <!-- Indicador de nivel -->
+    <div class="level-indicator">Nivel: <span id="current-level">1</span></div>
 
     <!-- Contenedor del juego -->
     <div class="game-container">
@@ -347,7 +362,7 @@
                 </ul>
             </div>
         
-            <div id="maze" style="display: grid; gap: 2px; background-image: url('IMAGENES/Desierto/mapa__desierto.jpg'); background-size: cover; padding: 10px; border: 2px solid #333; max-width: 100%; overflow: auto;"></div>
+            <div id="maze" style="display: grid; gap: 2px; background-image: url('IMAGENES/Desierto/mapa_desierto.jpg'); background-size: cover; padding: 10px; border: 2px solid #333; max-width: 100%; overflow: auto;"></div>
         
             <div id="command-list-container">
                 <h3>🕹 Movimientos</h3>
@@ -453,7 +468,7 @@
                     meta: "url('IMAGENES/Desierto/meta_desierto.png')",
                     personaje: "url('IMAGENES/Desierto/drago_desierto.png')",
                     estiloExtra: {
-                        sombra: "0 2px 5px rgba(210, 180, 140, 0.3)" /* Sutil sombra en lugar de borde */
+                        sombra: "0 2px 5px rgba(210, 180, 140, 0.3)"
                     }
                 },
                 colorTema: "#c2b280"
@@ -507,12 +522,17 @@
         let chestCollected = false;
         let dificultad = 1;
         let mundo = 1;
+        let nivelActual = 1;
+        const TOTAL_NIVELES = 15;
 
         // ========== FUNCIONES PRINCIPALES ==========
         window.onload = function() {
             // Configuración inicial
             dificultad = parseInt(localStorage.getItem('dificultad')) || 1;
-            mundo = parseInt(localStorage.getItem('mundo')) || 1;
+            nivelActual = parseInt(localStorage.getItem('nivelActual')) || 1;
+            
+            // Determinar el mundo basado en el nivel
+            mundo = Math.ceil(nivelActual / 5);
             
             // Configurar audio
             const audio = document.getElementById('audioElement');
@@ -529,59 +549,37 @@
                 }
             });
             
-            // Configurar laberinto
-            configurarLaberinto(mundo);
+            // Actualizar indicador de nivel
+            document.getElementById('current-level').textContent = nivelActual;
             
-            // Mostrar tutorial
-            const tuto = document.getElementById("tuto");
-            tuto.style.display = "block";
+            // Configurar laberinto
+            configurarLaberinto(mundo, nivelActual);
+            
+            // Mostrar tutorial solo en el primer nivel
+            if (nivelActual === 1) {
+                const tuto = document.getElementById("tuto");
+                tuto.style.display = "block";
+            }
         };
 
-        function configurarLaberinto(mundo) {
+        function configurarLaberinto(mundo, nivel) {
             const estilo = estilosMundos[mundo] || estilosMundos[1];
             
             // Cambiar fondo y tema
             document.body.style.backgroundImage = estilo.fondo;
             document.documentElement.style.setProperty('--color-tema', estilo.colorTema);
             
+            // Determinar tamaño del laberinto basado en el nivel
+            const baseSize = 5; // Tamaño base para los primeros 5 niveles
+            const incremento = Math.floor((nivel - 1) / 5); // Aumenta cada 5 niveles
+            const tamañoLaberinto = baseSize + incremento;
+            
+            // Generar laberinto según el nivel
+            mazeData = generarLaberinto(nivel, tamañoLaberinto);
+            
             // Configurar diseño del laberinto
-            switch(mundo) {
-                case 1: // Desierto
-                    document.getElementById("maze").style.backgroundImage = estilo.mapa;
-                    actualizarTutorial(estilo.celdas);
-                    mazeData = [
-                        [' ', ' ', ' ', ' ', ' '],
-                        [' ', 'wall', 'wall', ' ', ' '],
-                        [' ', 'door', ' ', 'chest', ' '],
-                        [' ', 'wall', 'wall', ' ', ' '],
-                        [' ', ' ', ' ', ' ', 'goal']
-                    ];
-                    break;
-                    
-                case 2: // Jungla
-                    document.getElementById("maze").style.backgroundImage = estilo.mapa;
-                    actualizarTutorial(estilo.celdas);
-                    mazeData = [
-                        [' ', 'wall', ' ', ' ', ' '],
-                        [' ', 'wall', ' ', 'chest', ' '],
-                        [' ', 'wall', 'door', 'wall', ' '],
-                        [' ', ' ', ' ', 'wall', ' '],
-                        ['chest', 'wall', ' ', ' ', 'goal']
-                    ];
-                    break;
-                    
-                case 3: // Hielo
-                    document.getElementById("maze").style.backgroundImage = estilo.mapa;
-                    actualizarTutorial(estilo.celdas);
-                    mazeData = [
-                        [' ', 'wall', 'wall', 'wall', ' '],
-                        [' ', ' ', 'door', ' ', ' '],
-                        ['wall', ' ', 'chest', ' ', 'wall'],
-                        [' ', ' ', ' ', ' ', ' '],
-                        [' ', 'wall', 'wall', ' ', 'goal']
-                    ];
-                    break;
-            }
+            document.getElementById("maze").style.backgroundImage = estilo.mapa;
+            actualizarTutorial(estilo.celdas);
             
             // Recalcular y renderizar
             mazeCols = mazeData[0].length;
@@ -590,6 +588,61 @@
             playerPos = { x: 0, y: 0 };
             goalPos = findGoalPosition();
             renderMaze();
+        }
+
+        function generarLaberinto(nivel, tamaño) {
+            // Crear un laberinto vacío
+            let laberinto = Array(tamaño).fill().map(() => Array(tamaño).fill(' '));
+            
+            // Colocar paredes de manera aleatoria pero asegurando que haya un camino
+            for (let y = 0; y < tamaño; y++) {
+                for (let x = 0; x < tamaño; x++) {
+                    // Dejar los bordes libres para el jugador y la meta
+                    if (x === 0 || y === 0 || x === tamaño-1 || y === tamaño-1) {
+                        continue;
+                    }
+                    
+                    // 30% de probabilidad de ser pared (ajustable según nivel)
+                    if (Math.random() < 0.3 + (nivel * 0.01)) {
+                        laberinto[y][x] = CELL_TYPES.WALL;
+                    }
+                }
+            }
+            
+            // Asegurar que el jugador empiece en (0,0) y la meta en el extremo opuesto
+            laberinto[0][0] = ' '; // Posición inicial del jugador
+            laberinto[tamaño-1][tamaño-1] = CELL_TYPES.GOAL; // Meta
+            
+            // Colocar una puerta y un cofre en posiciones aleatorias pero accesibles
+            let puertaColocada = false;
+            let cofreColocado = false;
+            
+            while (!puertaColocada || !cofreColocado) {
+                const x = Math.floor(Math.random() * (tamaño - 2)) + 1;
+                const y = Math.floor(Math.random() * (tamaño - 2)) + 1;
+                
+                // No colocar en la posición inicial ni en la meta
+                if ((x === 0 && y === 0) || (x === tamaño-1 && y === tamaño-1)) {
+                    continue;
+                }
+                
+                // Colocar puerta si no está colocada
+                if (!puertaColocada && laberinto[y][x] === ' ') {
+                    laberinto[y][x] = CELL_TYPES.DOOR;
+                    puertaColocada = true;
+                    continue;
+                }
+                
+                // Colocar cofre si no está colocado
+                if (!cofreColocado && laberinto[y][x] === ' ') {
+                    laberinto[y][x] = CELL_TYPES.CHEST;
+                    cofreColocado = true;
+                }
+            }
+            
+            // Asegurar que haya un camino desde el inicio hasta la meta
+            // (Implementación simplificada - en un juego real se usaría un algoritmo como DFS)
+            return laberinto;
         }
 
         function renderMaze() {
@@ -609,7 +662,6 @@
                     cellElement.className = "cell";
                     cellElement.style.backgroundImage = estilo.celdas.piso;
                     
-                    // Eliminamos cualquier referencia a bordes
                     if (cell === CELL_TYPES.WALL) {
                         cellElement.classList.add("wall");
                         cellElement.style.backgroundImage = estilo.celdas.pared;
@@ -705,6 +757,8 @@
         function startGame() {
             commandIndex = 0;
             paused = false;
+            doorPassed = false;
+            chestCollected = false;
             executeCommands();
         }
 
@@ -878,12 +932,11 @@
         }
 
         function changeLevel(parametro) {
-            doorPassed = false;
-            chestCollected = false;
-            
-            if (parametro === 2) {
-                mundo = (mundo % 3) + 1;
-                localStorage.setItem('mundo', mundo);
+            if (parametro === 2 && nivelActual < TOTAL_NIVELES) {
+                nivelActual++;
+                localStorage.setItem('nivelActual', nivelActual);
+            } else if (parametro === 1) {
+                // Reiniciar el nivel actual
             }
             
             location.reload();
