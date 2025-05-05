@@ -86,10 +86,11 @@
             color: white;
             border-radius: 5px;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s ease;
         }
         #controls button:hover {
-            background-color: #00bcf5;
+            transform: scale(1.1);/*hacer un poco mas grande*/
+            filter: brightness(1.1);
         }
 
         #command-list {
@@ -113,8 +114,7 @@
             #maze-container {
                 flex-direction: column;
                 align-items: center;
-            }
-            
+            }            
             #instructions, #command-list-container {
                 width: 100%;
                 max-width: 350px;
@@ -228,15 +228,56 @@
             50% { color: gold; }
             100% { color: black; }
         }
-        @keyframes conti {
-            0% { background-color: rgb(126, 173, 243); }
-            50% { background-color: rgb(109, 168, 255); }
-            100% { background-color: rgb(126, 173, 243); }
-        }       
-        @keyframes tut {
-            0% { background-color: lightcyan; }
-            50% { background-color: lightblue; }
-            100% { background-color: lightcyan; }
+        
+        /*estilos diferentes de botones*/
+        @keyframes tut-desierto {
+            0% { background-color: #f5e8d0; }
+            50% {  background-color: #e6b17e;}
+            100% { background-color: #f5e8d0; }
+        }
+        @keyframes tut-jungla {
+            0% { background-color: #d8f3dc; }
+            50% { background-color: #6aab6d;}
+            100% { background-color: #d8f3dc; }
+        }
+        @keyframes tut-hielo {
+            0% { background-color: #e2f3fd; }
+            50% { background-color: #8bc8f5;  }
+            100% { background-color: #e2f3fd; }
+        }
+
+        /*  animaciones según el mundo */
+        body[data-mundo="1"] .iniciar {
+            background-color: #c2b280;
+        } body[data-mundo="1"] .iniciar:hover { background-color: #be9f42;}
+        
+        body[data-mundo="2"] .iniciar {
+            background-color:  #4a7729;
+        } body[data-mundo="2"] .iniciar:hover { background-color: #75b349;}
+        
+        body[data-mundo="3"] .iniciar {
+            background-color:  #67c0ff;
+        } body[data-mundo="3"] .iniciar:hover { background-color: #2577b3;}
+
+        body[data-mundo="1"] #tuto,
+        body[data-mundo="1"] #tuto2,
+        body[data-mundo="1"] #instructions,
+        body[data-mundo="1"] #command-list-container {
+            animation: tut-desierto 8s infinite;
+        }
+
+        body[data-mundo="2"] #tuto,
+        body[data-mundo="2"] #tuto2,
+        body[data-mundo="2"] #instructions,
+        body[data-mundo="2"] #command-list-container {
+            animation: tut-jungla 8s infinite;
+        }
+
+        body[data-mundo="3"] #tuto,
+        body[data-mundo="3"] #tuto2,
+        body[data-mundo="3"] #instructions,
+        body[data-mundo="3"] #command-list-container {
+            animation: tut-hielo 8s infinite;
         }
 
         .iniciar {
@@ -252,10 +293,7 @@
             border-radius: 5px;
             border: solid black 2px;
             cursor: pointer;
-            transition: background 0.3s;
-        }
-        .iniciar:hover {
-            background-color: rgb(109, 168, 255);
+            transition: all 0.3s ease;
         }
 
         .continuar {
@@ -269,8 +307,8 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            animation: conti 10s infinite;
             border: 2px solid black;
+            background-color: var(--color-tema);
         }
 
         .mensaje-emergente {
@@ -489,7 +527,7 @@
                         sombra: "0 2px 5px rgba(163, 217, 255, 0.3)"
                     }
                 },
-                colorTema: "#a3d9ff"
+                colorTema: "#67c0ff"
             }
         };
 
@@ -548,8 +586,8 @@
         };
 
         function configurarLaberinto(mundo, nivel) {
-            const estilo = estilosMundos[mundo] /*|| estilosMundos[1]*/;
-            
+            const estilo = estilosMundos[mundo] || estilosMundos[1] /* || estilosMundos[1]*/;
+            document.body.setAttribute('data-mundo',mundo);
             // Cambiar fondo y tema
             document.body.style.backgroundImage = estilo.fondo;
             document.documentElement.style.setProperty('--color-tema', estilo.colorTema);
