@@ -350,13 +350,22 @@
         <button class="boton-regresar" onclick="window.location.href='inicio.html'">Regresar</button>
         <div class="titulo">LABERINTO INTERACTIVO</div>
         <div style="margin-right: 70px;">
-            <audio id="audioElement">
+            <audio id="audioFondo">
                 <source src="sonido.mp3" type="audio/mpeg">
                 Tu navegador no soporta el elemento de audio.   
-            </audio>    
-            <button id="audioBoton">
+            </audio>    <button id="audioBoton">
                 <img id="bocina" src="IMAGENES/bocina silencio.png" alt="Bocina" width="40" height="40">
             </button>
+            
+            <audio id="audioObjetivos">  
+                <source src="collect-points.mp3" type="audio/mpeg">
+                Tu navegador no soporta el elemento de audio.   
+            </audio>
+
+            <audio id="opening" autoplay>
+                <source src="opening.mp3" type="audio/mpeg">
+                Tu navegador no soporta el elemento de audio.   
+            </audio>    <button id="abrir">No carga solo D:</button>
         </div>
     </div>
 
@@ -552,25 +561,11 @@
         // ========== FUNCIONES PRINCIPALES ==========
         window.onload = function() {
             // Configuración inicial
-            dificultad = parseInt(localStorage.getItem('dificultad'))/* || 1*/;
-            nivelActual = parseInt(localStorage.getItem('nivelActual'))/* || 1*/;
+            dificultad = parseInt(localStorage.getItem('dificultad'));
+            nivelActual = parseInt(localStorage.getItem('nivelActual'));
             
             // Determinar el mundo basado en el nivel
-            mundo = Math.ceil(nivelActual / 5);
-            
-            // Configurar audio
-            const audio = document.getElementById('audioElement');
-            const boton = document.getElementById("audioBoton");
-            const bocina = document.getElementById("bocina");            
-            boton.addEventListener("click", function() {
-                if (audio.paused) {
-                    audio.play();
-                    bocina.src = "IMAGENES/bocina.png";
-                } else {
-                    audio.pause();
-                    bocina.src = "IMAGENES/bocina silencio.png";
-                }
-            });
+            mundo = Math.ceil(nivelActual / 5);           
             
             // Actualizar indicador de nivel
             document.getElementById('current-level').textContent = nivelActual;
@@ -585,8 +580,32 @@
             }
         };
 
+        //========== Configurar audio ==========
+        const cargar = document.getElementById('opening');
+        const botonAb = document.getElementById('abrir')
+        botonAb.addEventListener("click", function() {
+            cargar.play();
+        });                 
+        const audio = document.getElementById('audioFondo');
+        const boton = document.getElementById("audioBoton");
+        const bocina = document.getElementById("bocina");            
+        boton.addEventListener("click", function() {
+            if (audio.paused) {
+                audio.play();
+                bocina.src = "IMAGENES/bocina.png";
+            } else {
+                audio.pause();
+                bocina.src = "IMAGENES/bocina silencio.png";
+            }
+        });
+        function sonidoCofre(){
+            const audioCofre = document.getElementById('audioObjetivos');
+            audioCofre.play();            
+        }
+
+
         function configurarLaberinto(mundo, nivel) {
-            const estilo = estilosMundos[mundo] || estilosMundos[1] /* || estilosMundos[1]*/;
+            const estilo = estilosMundos[mundo] || estilosMundos[1];
             document.body.setAttribute('data-mundo',mundo);
             // Cambiar fondo y tema
             document.body.style.backgroundImage = estilo.fondo;
@@ -846,6 +865,7 @@
                         doorPassed = true;
                         openModal('door');
                     }
+                    sonidoCofre();
                     break;
                     
                 case CELL_TYPES.CHEST:
@@ -854,6 +874,7 @@
                         chestCollected = true;
                         openModal('chest');
                     }
+                    sonidoCofre();
                     break;
                     
                 case CELL_TYPES.GOAL:
