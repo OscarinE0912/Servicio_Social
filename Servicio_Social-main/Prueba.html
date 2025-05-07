@@ -627,12 +627,7 @@
             }
         };
 
-        //========== Configurar audio ==========
-        const cargar = document.getElementById('opening');
-        const botonAb = document.getElementById('abrir')
-        botonAb.addEventListener("click", function() {
-            cargar.play();
-        });                 
+        //========== Configurar audio ==========     
         const audio = document.getElementById('audioFondo');
         const boton = document.getElementById("audioBoton");
         const bocina = document.getElementById("bocina");            
@@ -649,6 +644,10 @@
             const audioCofre = document.getElementById('audioObjetivos');
             audioCofre.play();            
         }
+        function sonidoMeta(){
+            const cargar = document.getElementById('opening');
+            cargar.play();
+        }     
 
         function calculateOptimalCellSize() {
             const maxCells = Math.max(mazeCols, mazeRows);
@@ -929,13 +928,14 @@
                         chestCollected = true;
                         openModal('chest');
                     }
-                    sonidoCofre();
+                    
                     break;
                     
                 case CELL_TYPES.GOAL:
                     paused = true;
                     document.getElementById("goal-finish").classList.add("blink");
                     showWinScreen();
+                    sonidoMeta();
                     break;
             }
         }
@@ -1016,6 +1016,7 @@
                 paused = false;
                 answerInput.value = "";
                 setTimeout(executeCommands, 500);
+                sonidoCofre();
             } else {
                 alert("Respuesta incorrecta. Inténtalo de nuevo.");
                 answerInput.value = "";
