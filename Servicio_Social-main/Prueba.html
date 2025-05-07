@@ -89,7 +89,7 @@
             transition: all 0.3s ease;
         }
         #controls button:hover {
-            transform: scale(1.1);/*hacer un poco mas grande*/
+            transform: scale(1.1);
             filter: brightness(1.1);
         }
 
@@ -110,14 +110,63 @@
             margin-top: 20px;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 768px), (resolution: 125dpi) {
             #maze-container {
                 flex-direction: column;
                 align-items: center;
             }            
             #instructions, #command-list-container {
                 width: 100%;
-                max-width: 350px;
+                max-width: 300px;
+            }
+            
+            body[data-mundo="1"] #maze {
+                max-width: 125%;
+            }
+
+            body[data-mundo="2"] #maze{
+                max-width: 110%;
+            }
+            
+            body[data-mundo="3"] #maze {
+                max-width: 100%;
+            }
+            
+            .game-container {
+                margin-top: 60px;
+            }
+            
+            .controls-container {
+                padding: 10px;
+                margin-bottom: 10px;
+            }
+            
+            #controls button {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+        }
+
+        @media screen and (resolution: 125dpi) {
+            body[data-mundo="1"] #maze {
+                max-width: 125%;
+            }
+            
+            body[data-mundo="2"] #maze {
+                max-width: 110%;
+            }
+            
+            body[data-mundo="3"] #maze {
+                max-width: 100%;
+            }
+            
+            /* Ajustar tamaño de celdas si es necesario */
+            body[data-mundo="1"] .cell,
+            body[data-mundo="2"] .cell,
+            body[data-mundo="3"] .cell {
+                width: 25px;
+                height: 25px;
             }
         }
 
@@ -559,8 +608,8 @@
         // ========== FUNCIONES PRINCIPALES ==========
         window.onload = function() {
             // Configuración inicial
-            dificultad = parseInt(localStorage.getItem('dificultad'));
-            nivelActual = parseInt(localStorage.getItem('nivelActual'));
+            dificultad = parseInt(localStorage.getItem('dificultad')) || 1;
+            nivelActual = parseInt(localStorage.getItem('nivelActual')) || 1;
             
             // Determinar el mundo basado en el nivel
             mundo = Math.ceil(nivelActual / 5);           
@@ -572,7 +621,7 @@
             configurarLaberinto(mundo, nivelActual);
             
             // Mostrar tutorial solo en el primer nivel DE CADA MUNDO
-            if (nivelActual == 1 || nivelActual==6 || nivelActual==11 ) {
+            if (nivelActual == 1 || nivelActual == 6 || nivelActual == 11) {
                 const tuto = document.getElementById("tuto");
                 tuto.style.display = "block";
             }
@@ -601,6 +650,22 @@
             audioCofre.play();            
         }
 
+        function calculateOptimalCellSize() {
+            const maxCells = Math.max(mazeCols, mazeRows);
+            const isZoomed = window.devicePixelRatio > 1.2;
+ 
+            let baseSize;
+            if (mundo === 1) { 
+                baseSize = isZoomed ? 75 : 106; 
+            } else if (mundo === 2) { 
+                baseSize = isZoomed ? 66 : 94; 
+            } else { 
+                baseSize = isZoomed ? 60 : 85;
+            }
+            
+            const maxSize = Math.min(baseSize, Math.floor(window.innerWidth * 0.7 / maxCells));
+            return Math.max(25, maxSize);
+        }
 
         function configurarLaberinto(mundo, nivel) {
             const estilo = estilosMundos[mundo] || estilosMundos[1];
@@ -680,8 +745,6 @@
                 }
             }
             
-            // Asegurar que haya un camino desde el inicio hasta la meta
-            // (Implementación simplificada - en un juego real se usaría un algoritmo como DFS)
             return laberinto;
         }
 
@@ -740,12 +803,6 @@
                 img.style.backgroundImage = estilos[type];
                 img.style.border = `1px solid ${estilos.estiloExtra.colorBorde}`;
             });
-        }
-
-        function calculateOptimalCellSize() {
-            const maxCells = Math.max(mazeCols, mazeRows);
-            const maxSize = Math.min(85, Math.floor(window.innerWidth * 0.8 / maxCells));
-            return Math.max(30, maxSize);
         }
 
         function findGoalPosition() {
