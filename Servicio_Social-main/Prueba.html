@@ -919,7 +919,6 @@
                         doorPassed = true;
                         openModal('door');
                     }
-                    sonidoCofre();
                     break;
                     
                 case CELL_TYPES.CHEST:
@@ -957,15 +956,15 @@
             
             switch(dificultad) {
                 case 1: // Nivel fácil (6-7 años)
-                    num1 = Math.ceil(Math.random() * 5) + 1;
-                    num2 = Math.floor(Math.random() * 5) + 1; 
+                    num1 = Math.ceil(Math.random() * 50) + 1;
+                    num2 = Math.floor(Math.random() * 50) + 1; 
                     operador = '+';
                     correctAnswer = num1 + num2;
                     break;
                     
                 case 2: // Nivel medio (8-9 años)
-                    num1 = Math.ceil(Math.random() * 10) + 1;
-                    num2 = Math.floor(Math.random() * 10) + 1;
+                    num1 = Math.ceil(Math.random() * 500) + 1;
+                    num2 = Math.floor(Math.random() * 500) + 1;
                     if (Math.random() > 0.5) {
                         operador = '+';
                         correctAnswer = num1 + num2;
@@ -982,18 +981,18 @@
                     
                     switch(operador) {
                         case '+':
-                            num1 = Math.ceil(Math.random() * 15) + 1;
-                            num2 = Math.floor(Math.random() * 15) + 1;
+                            num1 = Math.ceil(Math.random() * 1500) + 1;
+                            num2 = Math.floor(Math.random() * 1500) + 1;
                             correctAnswer = num1 + num2;
                             break;
                         case '-':
-                            num1 = Math.floor(Math.random() * 20) + 1;
+                            num1 = Math.floor(Math.random() * 15000) + 1;
                             num2 = Math.floor(Math.random() * num1) + 1;
                             correctAnswer = num1 - num2;
                             break;
                         case '*':
-                            num1 = Math.ceil(Math.random() * 10) + 1;
-                            num2 = Math.floor(Math.random() * 10) + 1;
+                            num1 = Math.ceil(Math.random() * 15000) + 1;
+                            num2 = Math.floor(Math.random() * 15000) + 1;
                             correctAnswer = num1 * num2;
                             break;
                     }
