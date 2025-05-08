@@ -396,24 +396,8 @@
     <div class="header">
         <button class="boton-regresar" onclick="window.location.href='inicio.html'">Regresar</button>
         <div class="titulo">LABERINTO INTERACTIVO</div>
-        <div style="margin-right: 70px;">
-            <audio id="audioFondo">
-                <source src="sonido.mp3" type="audio/mpeg">
-                Tu navegador no soporta el elemento de audio.   
-            </audio>    <button id="audioBoton">
-                <img id="bocina" src="IMAGENES/bocina silencio.png" alt="Bocina" width="40" height="40">
-            </button>
-            
-            <audio id="audioObjetivos">  
-                <source src="collect-points.mp3" type="audio/mpeg">
-                Tu navegador no soporta el elemento de audio.   
-            </audio>
 
-            <audio id="opening" autoplay>
-                <source src="opening.mp3" type="audio/mpeg">
-                Tu navegador no soporta el elemento de audio.   
-            </audio>   
-        </div>
+        <div style="margin-right: 70px;"> </div>
     </div>
 
     <!-- Indicador de nivel -->
@@ -626,28 +610,28 @@
                 tuto.style.display = "block";
             }
         };
-
-        //========== Configurar audio ==========     
-        const audio = document.getElementById('audioFondo');
-        const boton = document.getElementById("audioBoton");
-        const bocina = document.getElementById("bocina");            
-        boton.addEventListener("click", function() {
-            if (audio.paused) {
-                audio.play();
-                bocina.src = "IMAGENES/bocina.png";
-            } else {
-                audio.pause();
-                bocina.src = "IMAGENES/bocina silencio.png";
-            }
-        });
-        function sonidoCofre(){
-            const audioCofre = document.getElementById('audioObjetivos');
-            audioCofre.play();            
+        //========== Configurar audio ==========    
+        function sonidoMover(){
+            let moverse=new Audio('moverse.wav');
+            moverse.play();
+        } 
+        function sonidoObjetivo(){
+            let objetivos=new Audio('objetivo.wav');
+            objetivos.play();
         }
         function sonidoMeta(){
-            const cargar = document.getElementById('opening');
-            cargar.play();
-        }     
+            let ganar=new Audio('ganar.mp3');
+            ganar.play();
+        } 
+        function sonidoPerder(){
+            let perder=new Audio('perder.wav');
+            perder.play();
+        }
+        function sonidoTocar(){
+            let tocar=new Audio('tocar.mp3');
+            tocar.play();
+        }
+        
 
         function calculateOptimalCellSize() {
             const maxCells = Math.max(mazeCols, mazeRows);
@@ -825,11 +809,13 @@
 
         // ========== FUNCIONES DE JUEGO ==========
         function addCommand(direction) {
+            sonidoTocar();
             if (commands.length > 0 && commands[commands.length - 1].direction === direction) {
                 commands[commands.length - 1].count++;
             } else {
                 commands.push({ direction: direction, count: 1 });
             }
+            
             updateCommandList();
         }
 
@@ -867,6 +853,7 @@
 
             if (commandIndex >= commands.length) {
                 if (!(playerPos.x === goalPos.x && playerPos.y === goalPos.y)) {
+                    sonidoPerder();
                     document.getElementById("restart-message").style.display = "block";
                     setTimeout(() => {
                         location.reload();
@@ -905,6 +892,7 @@
             }
 
             playerPos = { x: newX, y: newY };
+            sonidoMover();
             renderMaze();
             handleCellInteractions(newX, newY);
         }
@@ -1047,7 +1035,7 @@
                 paused = false;
                 answerInput.value = "";
                 setTimeout(executeCommands, 500);
-                sonidoCofre();
+                sonidoObjetivo();
             } else {
                 alert("Respuesta incorrecta. Inténtalo de nuevo.");
                 answerInput.value = "";
