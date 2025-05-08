@@ -226,6 +226,10 @@
             background-image: url('IMAGENES/Desierto/drago_desierto.png');
             background-size: contain;
         }
+        .trap { 
+            background-image: url('IMAGENES/Desierto/trampa_desierto.png');
+            background-size: contain;
+        }
 
         #commands {
             margin-top: 10px;
@@ -534,6 +538,7 @@
             DOOR: 'door',
             CHEST: 'chest', 
             GOAL: 'goal'
+            TRAP: 'trap'
         };
 
         const estilosMundos = {
@@ -546,6 +551,7 @@
                     puerta: "url('IMAGENES/Desierto/puerta_desierto.png')",
                     cofre: "url('IMAGENES/Desierto/cofre_desierto.png')",
                     meta: "url('IMAGENES/Desierto/meta_desierto.png')",
+                    trampa: "url('IMAGENES/Desierto/trampa_desierto.png')",
                     personaje: "url('IMAGENES/Desierto/drago_desierto.png')",
                     estiloExtra: {
                         sombra: "0 2px 5px rgba(210, 180, 140, 0.3)"
@@ -562,6 +568,7 @@
                     puerta: "url('IMAGENES/Jungla/puerta_jungla.png')",
                     cofre: "url('IMAGENES/Jungla/cofre_jungla.png')",
                     meta: "url('IMAGENES/Jungla/meta_jungla.png')",
+                    trampa: "url('IMAGENES/Jungla/trampa_jungla.png')",
                     personaje: "url('IMAGENES/Jungla/drago_jungla.png')",
                     estiloExtra: {
                         sombra: "0 2px 5px rgba(46, 139, 87, 0.3)"
@@ -578,6 +585,7 @@
                     puerta: "url('IMAGENES/Hielo/puerta_hielo.png')",
                     cofre: "url('IMAGENES/Hielo/cofre_hielo.png')",
                     meta: "url('IMAGENES/Hielo/meta_hielo.png')",
+                    trampa: "url('IMAGENES/Hielo/trampa_hielo.png')",
                     personaje: "url('IMAGENES/Hielo/drago_hielo.png')",
                     estiloExtra: {
                         sombra: "0 2px 5px rgba(163, 217, 255, 0.3)"
@@ -743,6 +751,19 @@
                     cofreColocado = true;
                 }
             }
+
+            let trampasColocadas = 0;
+            const maxTrampas = Math.min(2, Math.floor(tamaño/2)); // Máximo 2 trampas o tamaño/2
+            
+            while (trampasColocadas < maxTrampas) {
+                const x = Math.floor(Math.random() * (tamaño - 2)) + 1;
+                const y = Math.floor(Math.random() * (tamaño - 2)) + 1;
+                
+                if (laberinto[y][x] === ' ') {
+                    laberinto[y][x] = CELL_TYPES.TRAP;
+                    trampasColocadas++;
+                }
+            }
             
             return laberinto;
         }
@@ -780,10 +801,15 @@
                         cellElement.classList.add("goal");
                         cellElement.style.backgroundImage = estilo.celdas.meta;
                     }
+                    if (cell === CELL_TYPES.TRAP) {
+                        cellElement.classList.add("trap");
+                        cellElement.style.backgroundImage = estilo.celdas.trampa;
+                    }
                     if (playerPos.x === x && playerPos.y === y) {
                         cellElement.classList.add("player");
                         cellElement.style.backgroundImage = estilo.celdas.personaje;
                     }
+                    
                     
                     maze.appendChild(cellElement);
                 });
@@ -929,6 +955,10 @@
                     }
                     
                     break;
+
+                case CELL_TYPES.TRAP:
+                    gameOver();
+                    break;
                     
                 case CELL_TYPES.GOAL:
                     paused = true;
@@ -937,6 +967,41 @@
                     sonidoMeta();
                     break;
             }
+        }
+
+        function gameOver() {
+            paused = true;
+            const modal = document.createElement('div');
+            modal.style.position = 'fixed';
+            modal.style.top = '0';
+            modal.style.left = '0';
+            modal.style.width = '100%';
+            modal.style.height = '100%';
+            modal.style.backgroundColor = 'rgba(0,0,0,0.8)';
+            modal.style.display = 'flex';
+            modal.style.justifyContent = 'center';
+            modal.style.alignItems = 'center';
+            modal.style.zIndex = '100';
+            modal.style.color = 'white';
+            modal.style.fontSize = '2em';
+            modal.style.flexDirection = 'column';
+            
+            modal.innerHTML = `
+                <h2>¡Game Over!</h2>
+                <p>Has caído en una trampa</p>
+                <button onclick="location.reload()" style="
+                    padding: 10px 20px;
+                    font-size: 1em;
+                    margin-top: 20px;
+                    cursor: pointer;
+                    background-color: #ff4f5e;
+                    color: white;
+                    border: none;
+                    border-radius: 5px;
+                ">Reintentar</button>
+            `;
+            
+            document.body.appendChild(modal);
         }
 
         function openModal(type) {
@@ -950,51 +1015,75 @@
             }
         }
 
-       function generateQuestion() {
+        function generateQuestion() {
             let num1, num2, operador;
-            if(nivelActual)
             
             switch(dificultad) {
-                case 1: // Nivel fácil (6-7 años)
-                    num1 = Math.ceil(Math.random() * 50) + 1;
-                    num2 = Math.floor(Math.random() * 50) + 1; 
-                    operador = '+';
-                    correctAnswer = num1 + num2;
-                    break;
-                    
-                case 2: // Nivel medio (8-9 años)
-                    num1 = Math.ceil(Math.random() * 500) + 1;
-                    num2 = Math.floor(Math.random() * 500) + 1;
+                case 1: // Nivel 1: Suma y resta de 2 cifras <100
+                    num1 = Math.floor(Math.random() * 99) + 1;
+                    num2 = Math.floor(Math.random() * 99) + 1;
                     if (Math.random() > 0.5) {
                         operador = '+';
                         correctAnswer = num1 + num2;
                     } else {
                         operador = '-';
-                        if (num1 < num2) [num1, num2] = [num2, num1];
+                        if (num1 < num2) [num1, num2] = [num2, num1]; // Evitar resultados negativos
                         correctAnswer = num1 - num2;
                     }
                     break;
                     
-                case 3: // Nivel difícil (10-11 años)
-                    const operaciones = ['+', '-', '*'];
-                    operador = operaciones[Math.floor(Math.random() * operaciones.length)];
-                    
-                    switch(operador) {
-                        case '+':
-                            num1 = Math.ceil(Math.random() * 1500) + 1;
-                            num2 = Math.floor(Math.random() * 1500) + 1;
+                case 2: // Nivel 2: Suma/resta 3 cifras <1000, multiplicación/división (tablas 1-10)
+                    if (Math.random() > 0.5) { // 50% probabilidad de suma/resta
+                        num1 = Math.floor(Math.random() * 999) + 1;
+                        num2 = Math.floor(Math.random() * 999) + 1;
+                        if (Math.random() > 0.5) {
+                            operador = '+';
                             correctAnswer = num1 + num2;
-                            break;
-                        case '-':
-                            num1 = Math.floor(Math.random() * 15000) + 1;
-                            num2 = Math.floor(Math.random() * num1) + 1;
+                        } else {
+                            operador = '-';
+                            if (num1 < num2) [num1, num2] = [num2, num1];
                             correctAnswer = num1 - num2;
-                            break;
-                        case '*':
-                            num1 = Math.ceil(Math.random() * 15000) + 1;
-                            num2 = Math.floor(Math.random() * 15000) + 1;
+                        }
+                    } else { // 50% probabilidad de multiplicación/división
+                        num1 = Math.floor(Math.random() * 10) + 1; // 1-10
+                        num2 = Math.floor(Math.random() * 6) + 1; // 1-6 (tabla del 6)
+                        if (Math.random() > 0.5) {
+                            operador = '*';
                             correctAnswer = num1 * num2;
-                            break;
+                        } else {
+                            operador = '/';
+                            // Asegurar división exacta
+                            correctAnswer = num1;
+                            num1 = num1 * num2;
+                            correctAnswer = num2;
+                        }
+                    }
+                    break;
+                    
+                case 3: // Nivel 3: Suma/resta 4 cifras, multiplicación/división 2 cifras
+                    if (Math.random() > 0.5) { // 50% probabilidad de suma/resta
+                        num1 = Math.floor(Math.random() * 9999) + 1;
+                        num2 = Math.floor(Math.random() * 9999) + 1;
+                        if (Math.random() > 0.5) {
+                            operador = '+';
+                            correctAnswer = num1 + num2;
+                        } else {
+                            operador = '-';
+                            if (num1 < num2) [num1, num2] = [num2, num1];
+                            correctAnswer = num1 - num2;
+                        }
+                    } else { // 50% probabilidad de multiplicación/división
+                        num1 = Math.floor(Math.random() * 99) + 1; // 1-99
+                        num2 = Math.floor(Math.random() * 99) + 1; // 1-99
+                        if (Math.random() > 0.5) {
+                            operador = '*';
+                            correctAnswer = num1 * num2;
+                        } else {
+                            operador = '/';
+                            // Asegurar división exacta
+                            correctAnswer = num2;
+                            num2 = num1 * num2;
+                        }
                     }
                     break;
             }
