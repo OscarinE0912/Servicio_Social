@@ -950,51 +950,83 @@
             }
         }
 
-       function generateQuestion() {
+        function generateQuestion() {
             let num1, num2, operador;
-            if(nivelActual)
             
             switch(dificultad) {
-                case 1: // Nivel fácil (6-7 años)
-                    num1 = Math.ceil(Math.random() * 50) + 1;
-                    num2 = Math.floor(Math.random() * 50) + 1; 
-                    operador = '+';
-                    correctAnswer = num1 + num2;
-                    break;
-                    
-                case 2: // Nivel medio (8-9 años)
-                    num1 = Math.ceil(Math.random() * 500) + 1;
-                    num2 = Math.floor(Math.random() * 500) + 1;
+                case 1: // Nivel 1: Suma y resta de 2 cifras <100
+                    num1 = Math.floor(Math.random() * 99) + 1;
+                    num2 = Math.floor(Math.random() * 99) + 1;
                     if (Math.random() > 0.5) {
                         operador = '+';
                         correctAnswer = num1 + num2;
                     } else {
                         operador = '-';
-                        if (num1 < num2) [num1, num2] = [num2, num1];
+                        if (num1 < num2) [num1, num2] = [num2, num1]; // Evitar resultados negativos
                         correctAnswer = num1 - num2;
                     }
                     break;
                     
-                case 3: // Nivel difícil (10-11 años)
-                    const operaciones = ['+', '-', '*'];
-                    operador = operaciones[Math.floor(Math.random() * operaciones.length)];
-                    
-                    switch(operador) {
-                        case '+':
-                            num1 = Math.ceil(Math.random() * 1500) + 1;
-                            num2 = Math.floor(Math.random() * 1500) + 1;
+                case 2: // Nivel 2: Suma/resta 3 cifras <1000, multiplicación/división (tablas 1-10)
+                    if (Math.random() > 0.5) { // 50% probabilidad de suma/resta
+                        num1 = Math.floor(Math.random() * 999) + 1;
+                        num2 = Math.floor(Math.random() * 999) + 1;
+                        if (Math.random() > 0.5) {
+                            operador = '+';
                             correctAnswer = num1 + num2;
-                            break;
-                        case '-':
-                            num1 = Math.floor(Math.random() * 15000) + 1;
-                            num2 = Math.floor(Math.random() * num1) + 1;
+                        } else {
+                            operador = '-';
+                            if (num1 < num2) [num1, num2] = [num2, num1];
                             correctAnswer = num1 - num2;
-                            break;
-                        case '*':
-                            num1 = Math.ceil(Math.random() * 15000) + 1;
-                            num2 = Math.floor(Math.random() * 15000) + 1;
+                        }
+                    } else { // 50% probabilidad de multiplicación/división
+                        num1 = Math.floor(Math.random() * 10) + 1; // 1-10
+                        num2 = Math.floor(Math.random() * 6) + 1; // 1-6 (tabla del 6)
+                        if (Math.random() > 0.5) {
+                            operador = '*';
                             correctAnswer = num1 * num2;
-                            break;
+                        } else {
+                            operador = '/';
+                            // Asegurar división exacta
+                            correctAnswer = num1;
+                            num1 = num1 * num2;
+                            correctAnswer = num2;
+                        }
+                    }
+                    break;
+                    
+                case 3: // Nivel 3: Suma/resta 4 cifras, multiplicación/división 2 cifras
+                    if (Math.random() > 0.5) { // 50% probabilidad de suma/resta
+                        num1 = Math.floor(Math.random() * 9999) + 1;
+                        num2 = Math.floor(Math.random() * 9999) + 1;
+                        if (Math.random() > 0.5) {
+                            operador = '+';
+                            correctAnswer = num1 + num2;
+                        } else {
+                            operador = '-';
+                            if (num1 < num2) [num1, num2] = [num2, num1];
+                            correctAnswer = num1 - num2;
+                        }
+                    } else { // 50% probabilidad de multiplicación/división
+                        num1 = Math.floor(Math.random() * 99) + 1; // 1-99
+                        num2 = Math.floor(Math.random() * 99) + 1; // 1-99
+                        if (Math.random() > 0.5) {
+                            operador = '*';
+                            correctAnswer = num1 * num2;
+                        } else {
+                            // División (asegurar que sea exacta y con números de 2 cifras)
+                            num2 = Math.floor(Math.random() * 9) + 2; // 2-10 (divisor)
+                            correctAnswer = Math.floor(Math.random() * 9) + 10; // 10-99 (cociente)
+                            num1 = num2 * correctAnswer; // Dividendo
+                            
+                            // Asegurarnos que el dividendo (num1) tenga exactamente 2 cifras
+                            while(num1 < 10 || num1 > 99) {
+                                num2 = Math.floor(Math.random() * 9) + 2; // 2-10
+                                correctAnswer = Math.floor(Math.random() * 9) + 10; // 10-99
+                                num1 = num2 * correctAnswer;
+                            }
+                            operador = '/';
+                        }
                     }
                     break;
             }
