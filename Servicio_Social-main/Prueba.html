@@ -957,8 +957,8 @@
                     
                 case 2: // Nivel 2: Suma/resta 3 cifras <1000, multiplicación/división (tablas 1-10)
                     if (Math.random() > 0.5) { // 50% probabilidad de suma/resta
-                        num1 = Math.floor(Math.random() * 999) + 1;
-                        num2 = Math.floor(Math.random() * 999) + 1;
+                        num1 = Math.floor(Math.random() * 333) + 1;
+                        num2 = Math.floor(Math.random() * 333) + 1;
                         if (Math.random() > 0.5) {
                             operador = '+';
                             correctAnswer = num1 + num2;
@@ -978,15 +978,15 @@
                             // Asegurar división exacta
                             correctAnswer = num1;
                             num1 = num1 * num2;
-                            correctAnswer = num2;
+                            correctAnswer = num1 / num2;
                         }
                     }
                     break;
                     
                 case 3: // Nivel 3: Suma/resta 4 cifras, multiplicación/división 2 cifras
                     if (Math.random() > 0.5) { // 50% probabilidad de suma/resta
-                        num1 = Math.floor(Math.random() * 9999) + 1;
-                        num2 = Math.floor(Math.random() * 9999) + 1;
+                        num1 = Math.floor(Math.random() * 555) + 1;
+                        num2 = Math.floor(Math.random() * 555) + 1;
                         if (Math.random() > 0.5) {
                             operador = '+';
                             correctAnswer = num1 + num2;
