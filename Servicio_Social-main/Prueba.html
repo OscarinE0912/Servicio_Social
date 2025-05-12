@@ -978,7 +978,6 @@
                             // Asegurar división exacta
                             correctAnswer = num1;
                             num1 = num1 * num2;
-                            correctAnswer = num2;
                         }
                     }
                     break;
@@ -996,23 +995,20 @@
                             correctAnswer = num1 - num2;
                         }
                     } else { // 50% probabilidad de multiplicación/división
-                        num1 = Math.floor(Math.random() * 99) + 1; // 1-99
-                        num2 = Math.floor(Math.random() * 99) + 1; // 1-99
                         if (Math.random() > 0.5) {
+                            // Multiplicación
+                            num1 = Math.floor(Math.random() * 99) + 1; // 1-99
+                            num2 = Math.floor(Math.random() * 99) + 1; // 1-99
                             operador = '*';
                             correctAnswer = num1 * num2;
                         } else {
-                            // División (asegurar que sea exacta y con números de 2 cifras)
-                            num2 = Math.floor(Math.random() * 9) + 2; // 2-10 (divisor)
-                            correctAnswer = Math.floor(Math.random() * 9) + 10; // 10-99 (cociente)
-                            num1 = num2 * correctAnswer; // Dividendo
+                            // División exacta con números de 2 cifras
+                            do {
+                                correctAnswer = Math.floor(Math.random() * 90) + 10; // Cociente (10-99)
+                                num2 = Math.floor(Math.random() * 9) + 2; // Divisor (2-10)
+                                num1 = correctAnswer * num2; // Dividendo
+                            } while (num1 < 10 || num1 > 99); // Asegurar que el dividendo sea de 2 cifras
                             
-                            // Asegurarnos que el dividendo (num1) tenga exactamente 2 cifras
-                            while(num1 < 10 || num1 > 99) {
-                                num2 = Math.floor(Math.random() * 9) + 2; // 2-10
-                                correctAnswer = Math.floor(Math.random() * 9) + 10; // 10-99
-                                num1 = num2 * correctAnswer;
-                            }
                             operador = '/';
                         }
                     }
