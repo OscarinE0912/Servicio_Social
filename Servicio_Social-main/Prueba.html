@@ -161,7 +161,6 @@
                 max-width: 100%;
             }
             
-            /* Ajustar tamaño de celdas si es necesario */
             body[data-mundo="1"] .cell,
             body[data-mundo="2"] .cell,
             body[data-mundo="3"] .cell {
@@ -230,6 +229,15 @@
         #commands {
             margin-top: 10px;
             text-align: center;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        #commands button {
+            min-width: 180px;
+            margin: 5px;
         }
 
         #modal, #win-modal {
@@ -276,7 +284,6 @@
             100% { color: black; }
         }
         
-        /*estilos diferentes de botones*/
         @keyframes tut-desierto {
             0% { background-color: #f5e8d0; }
             50% {  background-color: #e6b17e;}
@@ -293,7 +300,6 @@
             100% { background-color: #e2f3fd; }
         }
 
-        /*  animaciones según el mundo */
         body[data-mundo="1"] .iniciar {
             background-color: #c2b280;
         } body[data-mundo="1"] .iniciar:hover { background-color: #be9f42;}
@@ -329,7 +335,6 @@
 
         .iniciar {
             font-size: 24px;
-            width: auto;
             height: 55px;
             display: flex;
             align-items: center;
@@ -341,6 +346,7 @@
             border: solid black 2px;
             cursor: pointer;
             transition: all 0.3s ease;
+            padding: 0 20px;
         }
 
         .continuar {
@@ -396,8 +402,7 @@
     <div class="header">
         <button class="boton-regresar" onclick="window.location.href='inicio.html'">Regresar</button>
         <div class="titulo">LABERINTO INTERACTIVO</div>
-
-        <div style="margin-right: 70px;"> </div>
+        <div style="margin-right: 70px;"></div>
     </div>
 
     <!-- Indicador de nivel -->
@@ -434,9 +439,11 @@
             </div>
         </div>
 
-        <!-- Botón de inicio -->
+        <!-- Botones de control -->
         <div id="commands">
             <button class="iniciar" onclick="startGame()">Iniciar</button>
+            <button class="iniciar" onclick="resetCommands()">Reiniciar Movimientos</button>
+            <button class="iniciar" onclick="removeLastCommand()">Eliminar Último</button>
         </div>
     </div>
 
@@ -610,7 +617,8 @@
                 tuto.style.display = "block";
             }
         };
-        //========== Configurar audio ==========    
+        
+        //========== Funciones de sonido ==========    
         function sonidoMover(){
             let moverse=new Audio('moverse.wav');
             moverse.play();
@@ -632,7 +640,7 @@
             tocar.play();
         }
         
-
+        // ========== FUNCIONES DEL LABERINTO ==========
         function calculateOptimalCellSize() {
             const maxCells = Math.max(mazeCols, mazeRows);
             const isZoomed = window.devicePixelRatio > 1.2;
@@ -807,7 +815,7 @@
             }
         });
 
-        // ========== FUNCIONES DE JUEGO ==========
+        // ========== FUNCIONES DE CONTROL ==========
         function addCommand(direction) {
             sonidoTocar();
             if (commands.length > 0 && commands[commands.length - 1].direction === direction) {
@@ -817,6 +825,22 @@
             }
             
             updateCommandList();
+        }
+
+        function resetCommands() {
+            sonidoTocar();
+            commands = [];
+            updateCommandList();
+        }
+
+        function removeLastCommand() {
+            sonidoTocar();
+            if (commands.length > 0) {
+                commands.pop();
+                updateCommandList();
+            } else {
+                alert("No hay movimientos para eliminar");
+            }
         }
 
         function updateCommandList() {
@@ -836,6 +860,7 @@
             });
         }
 
+        // ========== FUNCIONES DEL JUEGO ==========
         function startGame() {
             commandIndex = 0;
             paused = false;
@@ -907,6 +932,7 @@
                         doorPassed = true;
                         openModal('door');
                     }
+                    sonidoObjetivo();
                     break;
                     
                 case CELL_TYPES.CHEST:
@@ -915,7 +941,7 @@
                         chestCollected = true;
                         openModal('chest');
                     }
-                    
+                    sonidoObjetivo();
                     break;
                     
                 case CELL_TYPES.GOAL:
@@ -971,10 +997,10 @@
                         num1 = Math.floor(Math.random() * 10) + 1; // 1-10
                         num2 = Math.floor(Math.random() * 6) + 1; // 1-6 (tabla del 6)
                         if (Math.random() > 0.5) {
-                            operador = '*';
+                            operador = 'x';
                             correctAnswer = num1 * num2;
                         } else {
-                            operador = '/';
+                            operador = '÷';
                             // Asegurar división exacta
                             correctAnswer = num1;
                             num1 = num1 * num2;
@@ -999,7 +1025,7 @@
                             // Multiplicación
                             num1 = Math.floor(Math.random() * 99) + 1; // 1-99
                             num2 = Math.floor(Math.random() * 99) + 1; // 1-99
-                            operador = '*';
+                            operador = 'x';
                             correctAnswer = num1 * num2;
                         } else {
                             // División exacta con números de 2 cifras
@@ -1009,7 +1035,7 @@
                                 num1 = correctAnswer * num2; // Dividendo
                             } while (num1 < 10 || num1 > 99); // Asegurar que el dividendo sea de 2 cifras
                             
-                            operador = '/';
+                            operador = '÷';
                         }
                     }
                     break;
